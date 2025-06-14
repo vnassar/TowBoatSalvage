@@ -1,11 +1,16 @@
 ﻿@page "/salvage-board"
 @using TowBoatSalvageWebApp.Models
 @using TowBoatSalvageWebApp.Services
+@using Microsoft.AspNetCore.Components.Forms
 @inject SalvageTableService TableService
 @inject IJSRuntime JS
+@inject IWebHostEnvironment Env
+
 @implements IAsyncDisposable
 
 <h3>Salvage Dispatch Table</h3>
+<h3>Developer Mode:</h3>
+<p>hoverRow: @hoverRow</p>
 
 <!-- Add Column Button -->
 <button class="btn btn-primary mb-3" @onclick="ShowAddColumnModal">+ Add Column</button>
@@ -14,42 +19,86 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            @foreach (var col in TableService.Columns)
-            {
-                <th class="position-relative group">
-                    @col.Label
-                    <span class="column-type-label">(@col.Type)</span>
+                @foreach (var col in Columns)
+                {
+                    <th class="position-relative group">
+                        @col.Label
+                        <span class="column-type-label">(@col.Type)</span>
 
-                    <!--Three-dot icon -->
-                    <button class="menu-btn" @onclick="() => ShowColumnMenu(col.Id)">
+                        <!--Three-dot icon -->
+                        <button class="menu-btn" @onclick="() => ShowColumnMenu(col.Id)">
                         &#8942;
-                    </button>
+                        </button>
 
-                    <!-- Column menu -->
-                    @if (activeMenuColumnId == col.Id)
-                    {
-                        <div id="menu-@col.Id" class="column-menu">
+                        <!-- Column menu -->
+                        @if (activeMenuColumnId == col.Id)
+                        {
+                            <div id="menu-@col.Id" class="column-menu">
                             <button class="dropdown-item" @onclick="() => StartRenameColumn(col.Id)">Rename</button>
                             <button class="dropdown-item text-danger" @onclick="() => DeleteColumn(col.Id)">Delete</button>
-                        </div>
-                    }
-                </th>
-            }
+                            </div>
+                        }
+                    </th>
+                }
+            
+            
         </tr>
     </thead>
     <tbody>
-        @foreach (var row in TableService.Rows)
+        @foreach (var row in Rows)
         {
             <tr>
-                @foreach (var col in TableService.Columns)
+                @foreach (var col in Columns)
                 {
-                    <td>
-                        @RenderCell(row, col)
+
+                    /*@onmouseover="() => {hoverRow = row.Id; currentHoverRow = row; currentUploadColumn = col;}" @onmouseout="() => hoverRow = null */
+                    /*@onmouseleave="() => hoverRow = null"  // remove from under onmousenter because it's breaking the file upload */
+                    <td class="file-cell"
+                    >
+                        @if (col.Type == "FileUpload")
+                        {
+                            @* show up to 3 thumbnails *@
+                            var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
+                            var files = cell?.Files?.ToList() ?? new List<SalvageFile>();
+
+                            @if (files.Count > 0)
+                            {
+                                var toShow =files.Count > 3 ? files.Take(3) : files;
+                                foreach (var file in toShow)
+                                {
+                                    <span class="thumb-container" style="position:relative; display:inline-block;">
+                                    <img src="@($"/salvage_uploads/{file.FileName}")"
+                                    @onclick="() => OpenGallery(files, file.FileName)"
+                                    class="tiny-thumb" />
+                                    </span>
+                                }
+                                @*If more than3, show +N badge*@
+                                if (files.Count > 3)
+                                {
+                                    <span class="more-badge" @onclick="() => OpenGallery(files, files.First().FileName)">
+                                        +@(files.Count - 3)
+                                    </span>
+                                }
+                            }
+                            @* always show the upload Upload Button on hover *@
+                            
+                                <label class="upload-btn" @onclick:stopPropagation>
+                                    +
+                                    <InputFile OnChange="async e => UploadMultipleFiles(e, row.Id, col.Id)" multiple style="display:none"
+                                    @onclick:stopPropagation />
+                                </label>
+                            
+                        }
+                        else
+                        {
+                            @RenderCell(row, col) <!-- Use builder method for other types -->
+                        }
                     </td>
                 }
             </tr>
         }
     </tbody>
+    
 </table>
 
 <!-- Add Row Button -->
@@ -77,6 +126,7 @@
                         <option value="Dropdown">Dropdown</option>
                         <option value="Date">Date</option>
                         <option value="Number">Number</option>
+                        <option value="FileUpload">File Upload</option>
                     </select>
                 </div>
                 <div class="modal-footer">
@@ -109,8 +159,31 @@
     </div>
 }
 
-
-
+@if (isGalleryOpen)
+{
+    <div class="gallery-modal">
+        <div class="main-image">
+            <img src="@($"/salvage_uploads/{selectedImage}")" />
+        </div>
+        <div class="sidebar-thumbs">
+            @foreach (var img in currentGallery)
+            {
+                <div class="gallery-thumb-container">
+                <img src="@($"/salvage_uploads/{img.FileName}")"
+                class="thumb"
+                @onclick="() => selectedImage = img.FileName" />
+                <button class="delete-gallery-thumb"
+                        title="Delete"
+                        @onclick="async () => await DeleteFileAsync(img.Id)"
+                        @onclick:stopPropagation>
+                        ✕
+                    </button>
+                </div>
+            }
+        </div>
+        <button class="close-btn" @onclick="() => isGalleryOpen = false">×</button>
+    </div>
+}
 
 
 
@@ -127,12 +200,46 @@
     private string renameText = "";
     private int? editingColumndId = null;
     private DotNetObjectReference<SalvageBoard>? dotNetHelper;
+    private bool isGalleryOpen = false;
+    private string selectedImage = string.Empty;
+    private List<SalvageFile> currentGallery = new();
+    private int? hoverRow;
+    private string? ErrorMessage;
+    private SalvageRow currentHoverRow;
+    private SalvageColumn currentUploadColumn;
+    private List<SalvageColumn> Columns;
+    private List<SalvageRow> Rows;
 
+
+    //=========Lifecycle==============
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadBoardAsync();
+        dotNetHelper = DotNetObjectReference.Create(this);
+    }
+
+    private async Task LoadBoardAsync()
+    {
+        Columns = await TableService.GetColumnAsync();
+        Rows = await TableService.GetRowsWithCellAsync();
+    }
+
+    //========Menu JS Interop ============
     private async Task ShowColumnMenu(int columnId)
     {
         activeMenuColumnId = columnId;
-        dotNetHelper = DotNetObjectReference.Create(this);
-        await JS.InvokeVoidAsync("registerClickOutside", dotNetHelper, $"menu-{columnId}");
+
+        /*
+        * having error with this during file upload
+        if (dotNetHelper is null)
+        {
+            dotNetHelper = DotNetObjectReference.Create(this);
+            }
+        */
+
+                                                                                                                                                                                                        await JS.InvokeVoidAsync("registerClickOutside", dotNetHelper, $"menu-{columnId}");
+
+        StateHasChanged();
     }
 
     [JSInvokable]
@@ -142,15 +249,17 @@
         StateHasChanged();
     }
 
-    public async ValueTask DisposeAsync()
+    public ValueTask DisposeAsync()
     {
         dotNetHelper?.Dispose();
+        return ValueTask.CompletedTask;
     }
 
+    //===========Column Actions============
 
     private void StartRenameColumn(int columnId)
     {
-        var col = TableService.Columns.FirstOrDefault(c => c.Id == columnId);
+        var col = Columns.FirstOrDefault(c => c.Id == columnId);
         if (col != null)
         {
             renameText = col.Label;
@@ -160,27 +269,35 @@
         }
     }
 
-    private void RenameColumn()
+    private async Task RenameColumn()
     {
-        var col = TableService.Columns.FirstOrDefault(c => c.Id == editingColumndId);
-        if (col != null)
+        if (editingColumndId != null)
         {
-            col.Label = renameText;
+            await TableService.RenameColumnAsync(editingColumndId.Value, renameText);
+            await LoadBoardAsync();
         }
         isRenaming = false;
         editingColumndId = null;
     }
 
-    private void DeleteColumn(int columnId)
+    private async Task AddColumn()
     {
-        TableService.Columns.RemoveAll(c => c.Id == columnId);
-        foreach (var row in TableService.Rows)
+        if (!string.IsNullOrWhiteSpace(newColumnLabel))
         {
-            row.CellValues.Remove(columnId);
+            await TableService.AddColumnAsync(newColumnLabel, newColumnType, Columns.Count);
+            await LoadBoardAsync();
         }
+        CloseModal();
+    }
+
+    private async Task DeleteColumn(int columnId)
+    {
+        await TableService.DeleteColumnAsync(columnId);
+        await LoadBoardAsync();
         activeMenuColumnId = null;
     }
 
+    //=============Modal/UI Logic============
     private void ShowAddColumnModal()
     {
         isAddColumnModalOpen = true;
@@ -193,50 +310,48 @@
         isAddColumnModalOpen = false;
     }
 
-    private void AddColumn()
+    //============Row ACtions==============
+    private async Task AddRow()
     {
-        if (!string.IsNullOrWhiteSpace(newColumnLabel))
-        {
-            TableService.AddColumn(newColumnLabel, newColumnType);
-        }
-        CloseModal();
+        await TableService.AddRowAsync();
+        await LoadBoardAsync();
     }
 
-    private void AddRow()
-    {
-        TableService.AddRow();
-    }
-
+    //=============Cell Rendering=============
     private RenderFragment RenderCell(SalvageRow row, SalvageColumn col) => builder =>
     {
         builder.OpenElement(0, "div");
-        var value = row.CellValues.ContainsKey(col.Id) ? row.CellValues[col.Id] : "";
+        //var value = row.CellValues.ContainsKey(col.Id) ? row.CellValues[col.Id] : "";
+        var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
+        var value = cell?.Value ?? "";
 
         switch (col.Type)
         {
-            
+
             case "Status":
-            builder.OpenElement(1, "select");
-            builder.AddAttribute(2, "class", "form-select");
-            builder.AddAttribute(3, "value", value);
-            builder.AddAttribute(4, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, e =>
+                builder.OpenElement(1, "select");
+                builder.AddAttribute(2, "class", "form-select");
+                builder.AddAttribute(3, "value", value);
+                builder.AddAttribute(4, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, async e =>
             {
-            row.CellValues[col.Id] = e.Value?.ToString() ?? "";
+                await TableService.UpdateCellValueAsync(row.Id, col.Id, e.Value?.ToString() ?? "");
+                await LoadBoardAsync();
             }));
-            builder.OpenElement(5, "option"); builder.AddContent(6, "Not Started"); builder.CloseElement();
-            builder.OpenElement(7, "option"); builder.AddContent(8, "In Progress"); builder.CloseElement();
-            builder.OpenElement(9, "option"); builder.AddContent(10, "Completed"); builder.CloseElement();
-            builder.CloseElement();
-            break;
+                builder.OpenElement(5, "option"); builder.AddContent(6, "Not Started"); builder.CloseElement();
+                builder.OpenElement(7, "option"); builder.AddContent(8, "In Progress"); builder.CloseElement();
+                builder.OpenElement(9, "option"); builder.AddContent(10, "Completed"); builder.CloseElement();
+                builder.CloseElement();
+                break;
 
             case "Date":
                 builder.OpenElement(11, "input");
                 builder.AddAttribute(12, "type", "date");
                 builder.AddAttribute(13, "class", "form-control");
                 builder.AddAttribute(14, "value", value);
-                builder.AddAttribute(15, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, e =>
+                builder.AddAttribute(15, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, async e =>
                 {
-                    row.CellValues[col.Id] = e.Value?.ToString() ?? "";
+                    await TableService.UpdateCellValueAsync(row.Id, col.Id, e.Value?.ToString() ?? "");
+                    await LoadBoardAsync();
                 }));
                 builder.CloseElement();
                 break;
@@ -246,9 +361,10 @@
                 builder.AddAttribute(17, "type", "number");
                 builder.AddAttribute(18, "class", "form-control");
                 builder.AddAttribute(19, "value", value);
-                builder.AddAttribute(20, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, e =>
+                builder.AddAttribute(20, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, async e =>
                 {
-                    row.CellValues[col.Id] = e.Value?.ToString() ?? "";
+                    await TableService.UpdateCellValueAsync(row.Id, col.Id, e.Value?.ToString() ?? "");
+                    await LoadBoardAsync();
                 }));
                 builder.CloseElement();
                 break;
@@ -258,13 +374,110 @@
                 builder.AddAttribute(22, "type", "text");
                 builder.AddAttribute(23, "class", "form-control");
                 builder.AddAttribute(24, "value", value);
-                builder.AddAttribute(25, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, e =>
+                builder.AddAttribute(25, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, async e =>
                 {
-                    row.CellValues[col.Id] = e.Value?.ToString() ?? "";
+                    await TableService.UpdateCellValueAsync(row.Id, col.Id, e.Value?.ToString() ?? "");
+                    await LoadBoardAsync();
                 }));
                 builder.CloseElement();
                 break;
         }
-        builder.CloseElement();
+        builder.CloseElement(); // outer div
     };
+
+    //======================File Upload=============
+    private async Task UploadMultipleFiles(InputFileChangeEventArgs e, int rowId, int colId)
+    {
+        try
+        {
+
+            // assume one column per handler' find row and column via a closure or extra fields
+            //var row = currentHoverRow; // track which row is hovere/active
+            //var col = currentUploadColumn; // and which column the upload button belongs to 
+            // ensuring dictionary exists
+            /*
+            if (!row.CellFiles.ContainsKey(col.Id))
+                row.CellFiles[col.Id] = new List<string>();
+
+            */
+                                                                                                                                    //ensuring folder exists
+                                                                                                                                    var uploadsFolder = Path.Combine(Env.WebRootPath, "salvage_uploads");
+            Directory.CreateDirectory(uploadsFolder);
+
+
+            foreach (var file in e.GetMultipleFiles())
+            {
+                var fileName = $"{Guid.NewGuid()}_{file.Name}";
+                var path = Path.Combine(uploadsFolder, fileName);
+
+                await using var fs = new FileStream(path, FileMode.Create);
+                await file.OpenReadStream(1_000_000_000).CopyToAsync(fs);
+
+                await TableService.AddFileToCellAsync(rowId, colId, fileName, file.Name);
+            }
+            ErrorMessage = null;
+            // hoverRow = null; // clearing which hovered row its at since doing it before this was breaking the upload 
+            //not needed now 
+            await LoadBoardAsync();
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+            Console.Error.WriteLine($"Upload failed: {ex}");
+            StateHasChanged();
+        }
+    }
+
+    private void OpenGallery(List<SalvageFile> galleryFiles, string selectedFileName)
+    {
+        currentGallery = galleryFiles;
+        selectedImage = selectedFileName;
+        isGalleryOpen = true;
+    }
+
+    private async Task DeleteFileAsync(int fileId)
+    {
+        await TableService.DeleteFileAsync(fileId);
+        await LoadBoardAsync();
+
+        //remove from currentGallery and update selectedImage if needed
+        currentGallery = currentGallery.Where(f => f.Id != fileId).ToList();
+        if (currentGallery.Count == 0)
+        {
+            isGalleryOpen = false;
+        }
+        else if (!currentGallery.Any(f => f.FileName == selectedImage))
+        {
+            selectedImage = currentGallery.First().FileName;
+        }
+    }
+
+    
+
+    /*
+private async Task HandleUpload(InputFileChangeEventArgs e, SalvageRow row, SalvageColumn col)
+    {
+    try
+    {
+        foreach (var file in e.GetMultipleFiles())
+        {
+            var fileName = $"{Guid.NewGuid()}_{file.Name}";
+            var uploadPath = Path.Combine(Env.WebRootPath, "salvage_uploads", fileName);
+
+            await using var fs = new FileStream(uploadPath, FileMode.Create);
+            await file.OpenReadStream(10_000_000).CopyToAsync(fs);
+
+            // If you want multiple files in the future, use a delimiter or List<string>
+                row.CellValues[col.Id] = fileName;
+        }
+        StateHasChanged();
+    }
+    catch (Exception ex)
+        {
+        Console.WriteLine("Upload failed: " + ex.Message);
+        }
+    }
+    */
+
 }

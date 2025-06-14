@@ -13,13 +13,15 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 //Adding Service 
-builder.Services.AddSingleton<SalvageTableService>();
+builder.Services.AddScoped<SalvageTableService>();
 
 
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+
+builder.Services.AddDbContext<SalvageDbContext>(options => options.UseSqlite("Data Source=salvage.db"));
 
 builder.Services.AddAuthentication(options =>
     {

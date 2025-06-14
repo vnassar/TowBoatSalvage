@@ -175,3 +175,180 @@ th:hover .menu-btn {
     color: #888;
 }
 
+/* File Upload */
+input[type="file"] {
+    color: white;
+    font-size: 0.85rem;
+}
+img.upload-thumb {
+    max-height: 80px;
+    border-radius: 6px;
+    margin-top: 5px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.5);
+}
+.tiny-thumb {
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+    margin: 2px;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 0 3px rgba(0,0,0,0.4);
+}
+
+.upload-btn {
+    background-color: #2f2f44;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+/* GALLERY MODAL*/
+
+.gallery-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    z-index: 1000;
+}
+
+.main-image {
+    flex: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .main-image img {
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #000;
+    }
+
+.sidebar-thumbs {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+    .sidebar-thumbs .thumb {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        margin: 5px;
+        border-radius: 6px;
+        cursor: pointer;
+        border: 2px solid transparent;
+    }
+
+        .sidebar-thumbs .thumb:hover {
+            border: 2px solid #1dd1a1;
+        }
+
+/* DELETE BUTTON INSIDE GALLERY*/
+.gallery-thumb-container:hover {
+    position: relative;
+    display: inline-block;
+    margin: 6px 4px;
+}
+
+.thumb {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.11);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+    .thumb.selected-thumb {
+        border-color: #2196f3;
+        box-shadow: 0 2px 8px rgba(33,150,243,0.18);
+    }
+
+.gallery-thumb-container:hover .delete-gallery-thumb {
+    display: flex;
+    opacity: 1;
+}
+
+.delete-gallery-thumb:hover {
+    background: #d32f2f;
+    opacity: 1;
+}
+
+.delete-gallery-thumb {
+    display: none;
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 22px;
+    height: 22px;
+    background: rgba(33,33,33,0.8);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0.85;
+    transition: background 0.2s, opacity 0.2s;
+    z-index: 2;
+    /* --- FLEX CENTER --- */
+    display: none; /* will be overridden on hover */
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 1;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    font-size: 30px;
+    background: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+
+
+.file-cell .upload-btn {
+    visibility: hidden;
+    transition: 0.2s;
+}
+
+.file-cell:hover .upload-btn {
+    visibility: visible;
+}
+
+/* +n icon */
+.more-badge {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: rgba(0,0,0,0.6);
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    justify-content: center;
+    font-weight: 500;
+    margin-left: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+

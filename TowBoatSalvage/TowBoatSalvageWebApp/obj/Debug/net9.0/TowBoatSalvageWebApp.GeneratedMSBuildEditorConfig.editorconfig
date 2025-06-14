@@ -196,6 +196,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xIb21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/vnass/Desktop/Projects/GitHub/TowBoatSalvage/TowBoatSalvage/TowBoatSalvageWebApp/Components/Pages/Notes.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xOb3Rlcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/vnass/Desktop/Projects/GitHub/TowBoatSalvage/TowBoatSalvage/TowBoatSalvageWebApp/Components/Pages/SalvageBoard.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xTYWx2YWdlQm9hcmQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
