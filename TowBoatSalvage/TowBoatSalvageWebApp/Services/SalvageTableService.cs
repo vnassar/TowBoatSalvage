@@ -136,7 +136,7 @@ namespace TowBoatSalvageWebApp.Services
         }
 
         //==============FILES=================
-        public async Task AddFileToCellAsync(int rowId, int columnId, string fileName, string originalName)
+        public async Task AddFileToCellAsync(int rowId, int columnId, string fileName, string originalName, string fileType)
         {
             var cell = await _db.Cells.FirstOrDefaultAsync(c => c.RowId == rowId && c.ColumnId == columnId);
 
@@ -157,6 +157,7 @@ namespace TowBoatSalvageWebApp.Services
                 FileName = fileName,
                 OriginalName = originalName,
                 UploadedAt = DateTime.UtcNow,
+                FileType = fileType, 
                 CellId = cell.Id
             };
 
@@ -174,7 +175,7 @@ namespace TowBoatSalvageWebApp.Services
             if (file!= null)
             {
                 //remove physical file
-                var filePath = Path.Combine(_env.WebRootPath, "salvage_uplaods", file.FileName);
+                var filePath = Path.Combine(_env.WebRootPath, "salvage_uploads", file.FileName);
                 if (File.Exists(filePath))
                 {
                     File.Delete(filePath);

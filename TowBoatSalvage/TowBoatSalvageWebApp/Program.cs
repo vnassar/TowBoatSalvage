@@ -57,6 +57,7 @@ else
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles(); //serve files over wwwroot
 
 
 app.UseAntiforgery();

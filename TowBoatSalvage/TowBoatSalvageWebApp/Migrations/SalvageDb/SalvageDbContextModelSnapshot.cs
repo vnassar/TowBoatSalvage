@@ -78,6 +78,10 @@ namespace TowBoatSalvageWebApp.Migrations.SalvageDb
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("FileType")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("OriginalName")
                         .IsRequired()
                         .HasColumnType("TEXT");

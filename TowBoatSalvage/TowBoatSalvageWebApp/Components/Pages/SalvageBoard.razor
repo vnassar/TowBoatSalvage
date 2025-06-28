@@ -21,14 +21,18 @@
         <tr>
                 @foreach (var col in Columns)
                 {
-                    <th class="position-relative group">
-                        @col.Label
-                        <span class="column-type-label">(@col.Type)</span>
-
-                        <!--Three-dot icon -->
-                        <button class="menu-btn" @onclick="() => ShowColumnMenu(col.Id)">
-                        &#8942;
-                        </button>
+                    <th class="position-relative">
+                        <div class="d-flex justify-content-between align-items-center w-100">
+                            <div>
+                                @col.Label
+                                <span class="column-type-label">(@col.Type)</span>
+                            </div>
+                            <!--Three-dot icon -->
+                            <button class="menu-btn" @onclick="() => ShowColumnMenu(col.Id)" @onclick:stopPropagation>
+                            &#8942;
+                            </button>
+                        </div>
+                        
 
                         <!-- Column menu -->
                         @if (activeMenuColumnId == col.Id)
@@ -94,6 +98,66 @@
                             @RenderCell(row, col) <!-- Use builder method for other types -->
                         }
                     </td>
+                    // file upload duplicating.. this cant go here
+                    <td class="file-cell">
+                        @* Document Upload *@
+                        @if (col.Type == "DocumentUpload")
+                        {
+                            var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
+                            var files = cell?.Files?.ToList() ?? new List<SalvageFile>();
+
+                            @foreach (var file in files)
+                            {
+                                // for view in browser
+                                // var baseUrl = "https://towboat.vnassar.com";
+                                // var baseUrl = "https://localhost:5010";
+                                var baseUrl = "https://localhost:5010";
+                                var fileUrl = $"{baseUrl}/salvage_uploads/{file.FileName}";
+                                var officeViewerUrl = $"https://view.officeapps.live.com/op/view.aspx?src={Uri.EscapeDataString(fileUrl)}";
+
+                                <span class="doc-link">
+                                    @if (file.FileType == "application/pdf")
+                                    {
+                                        // direct browser link
+                                        <a href="@($"/salvage_uploads/{file.FileName}")" target="_blank">
+                                            <i class="fade fa-file-pdf-o" style="color:#d32f2f"></i>
+                                            @file.OriginalName
+                                        </a>
+                                    }
+                                    else if (file.FileType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+                                    file.FileType == "application/msword" ||
+                                    file.FileType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+                                    file.FileType == "application/vnd.openxmlformats-officedocument.presentationml.presentation" ||
+                                    file.FileType == "application/vnd.ms-excel")
+                                    {
+                                        // Word, Excel, PowerPoint: Office Online Viewer
+
+                                        <a href="@officeViewerUrl" target="_blank" rel="noopener">
+                                            <i class="fa fa-file-word-o" style="color:#1976d2"></i>
+                                            @file.OriginalName
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        // Other file types: direct link
+                                        <a href="@($"/salvage_uploads/{file.FileName}")" target="_blank">
+                                            <i class="fa fa-file-o"></i>
+                                            @file.OriginalName
+                                        </a>
+                                    }
+                                </span>
+
+                            }
+                            <label class="upload-btn" @onclick:stopPropagation>
+                                +
+                                <InputFile OnChange="e => UploadDocumentFiles(e, row.Id, col.Id)" multiple style="display:none" @onclick:stopPropagation />
+                            </label>
+                        }
+                        else
+                        {
+                            @RenderCell(row, col) <!-- Use builder method for other types -->
+                        }
+                    </td>
                 }
             </tr>
         }
@@ -127,6 +191,7 @@
                         <option value="Date">Date</option>
                         <option value="Number">Number</option>
                         <option value="FileUpload">File Upload</option>
+                        <option value="DocumentUpload">Document Upload</option>
                     </select>
                 </div>
                 <div class="modal-footer">
@@ -191,6 +256,8 @@
 
 
 
+
+
 @code {
     private bool isAddColumnModalOpen = false;
     private string newColumnLabel = string.Empty;
@@ -209,6 +276,8 @@
     private SalvageColumn currentUploadColumn;
     private List<SalvageColumn> Columns;
     private List<SalvageRow> Rows;
+
+
 
 
     //=========In the beginning! ==============
@@ -237,7 +306,7 @@
             }
         */
 
-                                                                                                                                                                                                        await JS.InvokeVoidAsync("registerClickOutside", dotNetHelper, $"menu-{columnId}");
+        await JS.InvokeVoidAsync("registerClickOutside", dotNetHelper, $"menu-{columnId}");
 
         StateHasChanged();
     }
@@ -400,8 +469,9 @@
                 row.CellFiles[col.Id] = new List<string>();
 
             */
-                                                                                                                                    //ensuring folder exists
-                                                                                                                                    var uploadsFolder = Path.Combine(Env.WebRootPath, "salvage_uploads");
+                                                                                                                                                                                                                                                //ensuring folder exists
+            var uploadsFolder = Path.Combine(Env.WebRootPath, "salvage_uploads");
+
             Directory.CreateDirectory(uploadsFolder);
 
 
@@ -413,7 +483,7 @@
                 await using var fs = new FileStream(path, FileMode.Create);
                 await file.OpenReadStream(1_000_000_000).CopyToAsync(fs);
 
-                await TableService.AddFileToCellAsync(rowId, colId, fileName, file.Name);
+                await TableService.AddFileToCellAsync(rowId, colId, fileName, file.Name, "img");
             }
             ErrorMessage = null;
             // hoverRow = null; // clearing which hovered row its at since doing it before this was breaking the upload 
@@ -427,6 +497,24 @@
             Console.Error.WriteLine($"Upload failed: {ex}");
             StateHasChanged();
         }
+    }
+
+    //== Document Upload==============
+    private async Task UploadDocumentFiles(InputFileChangeEventArgs e, int rowId, int colId)
+    {
+        foreach (var file in e.GetMultipleFiles())
+        {
+            var fileName = $"{Guid.NewGuid()}_{file.Name}";
+            var path = Path.Combine(Env.WebRootPath, "salvage_uploads", fileName);
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+
+            await using var fs = new FileStream(path, FileMode.Create);
+            await file.OpenReadStream(50_000_000).CopyToAsync(fs); // 50mb max
+
+            await TableService.AddFileToCellAsync(rowId, colId, fileName, file.Name, file.ContentType);
+
+        }
+        await LoadBoardAsync();
     }
 
     private void OpenGallery(List<SalvageFile> galleryFiles, string selectedFileName)

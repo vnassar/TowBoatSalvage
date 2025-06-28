@@ -6,6 +6,8 @@
         public string FileName { get; set; } // Actual file name on disk
         public string OriginalName { get; set; } // Original name uploaded by user
         public DateTime UploadedAt { get; set; } // Timestamp
+        
+        public string FileType { get; set; } // image/png, word/pdf
         public int CellId { get; set; } // Foreign key to SalvageCell
         public SalvageCell Cell { get; set; }
     }
