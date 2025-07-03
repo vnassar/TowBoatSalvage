@@ -231,11 +231,11 @@ C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalv
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\staticwebassets.build.json.cache
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\staticwebassets.development.json
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\staticwebassets.build.endpoints.json
+C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\TowBoatS.E71FA027.Up2Date
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\TowBoatSalvageWebApp.dll
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\refint\TowBoatSalvageWebApp.dll
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\TowBoatSalvageWebApp.pdb
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\TowBoatSalvageWebApp.genruntimeconfig.cache
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\ref\TowBoatSalvageWebApp.dll
-C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
-C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\compressed\inx8qzgsre-x2egjwetzz.gz
+C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\compressed\inx8qzgsre-6ziot3mfmr.gz

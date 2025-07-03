@@ -60,341 +60,473 @@ h1:focus {
 }
 
 
-/*      SALVAGE-BOARD CSS BELOW                   */
+/* Salvage board*/
 
+/* Monday.com-inspired styling for Salvage Board */
 
-
-body {
-    background-color: #1e1e2f;
-    color: #ffffff;
-    font-family: 'Segoe UI', sans-serif;
+/* Base styles and resets */
+.salvage-board {
+    font-family: 'Roboto', 'Segoe UI', sans-serif;
+    color: #323338;
+    background-color: #f6f7fb;
+    padding: 20px;
+    border-radius: 8px;
 }
 
-.table {
-    width: 100%;
-    background-color: #2a2a40;
-    border-collapse: separate;
-    border-spacing: 0 10px;
-    color: #ffffff;
-}
-
-    .table thead th {
-        background-color: transparent;
-        color: #a0a0b0;
+    /* Header styling */
+    .salvage-board h3 {
+        font-size: 24px;
         font-weight: 600;
-        padding: 12px;
-        border: none;
+        margin-bottom: 20px;
+        color: #323338;
     }
 
-    .table tbody td {
-        background-color: #2f2f44;
-        padding: 12px;
-        border-top: 1px solid #3e3e55;
-        border-bottom: 1px solid #3e3e55;
-        vertical-align: middle;
+    /* Button styling */
+    .salvage-board .btn {
+        border-radius: 4px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        box-shadow: none;
+        padding: 8px 16px;
     }
 
-.btn {
-    border-radius: 6px;
-    font-weight: 600;
-}
-
-.status-pill {
-    padding: 4px 10px;
-    border-radius: 20px;
-    color: white;
-    font-weight: 500;
-    display: inline-block;
-}
-
-.status-completed {
-    background-color: #1dd1a1;
-}
-
-.status-delayed {
-    background-color: #ee5253;
-}
-
-.status-progress {
-    background-color: #feca57;
-}
-
-.status-scheduled {
-    background-color: #54a0ff;
-}
-
-.badge-pill {
-    display: inline-block;
-    background-color: #4b4b60;
-    border-radius: 15px;
-    padding: 4px 10px;
-    font-size: 0.85rem;
-    margin: 2px;
-    color: white;
-}
-
-
-.menu-btn {
-    position: absolute;
-    right: 5px;
-    top: 5px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 1.2rem;
-    padding: 3px 8px;
-    border-radius: 3px;
-    display: inline-block;
-    visibility: visible;
-    opacity: 0.6;
-    /*
-        as of 6.27.25
-        background: none;
-        border: none;
-        color: #aaa;
-        float: right;
-        font-size: 18px;
-        cursor: pointer;
-        visibility: hidden;
-    */
-}
-    .menu-btn:hover {
-        background-color: rgba(0, 0, 0, 0.1);
-        opacity: 1;
-    }
-th.position-relative {
-    padding-right: 30px; /* Make room for the menu button */
-}
-
-th:hover .menu-btn {
-    visibility: visible;
-}
-
-.column-menu {
-    position: absolute;
-    right: 0;
-    top: 100%;
-    z-index: 1000;
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    min-width: 120px;
-    /*
-        position: absolute;
-        top: 35px;
-        right: 10px;
-        background-color: #333;
-        border: 1px solid #444;
-        border-radius: 6px;
-        padding: 4px;
-        z-index: 1000;
-    */
-}
-
-    .column-menu .dropdown-item {
-        display: block;
-        width: 100%;
-        padding: 8px 12px;
-        text-align: left;
-        background: none;
-        border: none;
-        cursor: pointer;
-        /*
-            display: block;
-        background: none;
-        color: #fff;
-        padding: 6px 12px;
-        text-align: left;
-        border: none;
-        width: 100%;
-        cursor: pointer;
-        */
+    .salvage-board .btn-primary {
+        background-color: #0073ea;
+        border-color: #0073ea;
     }
 
-.dropdown-item:hover {
-    background-color: #f8f9fa;
-}
-
-.column-type-label {
-    font-size: 0.8em;
-    color: #888;
-}
-
-/* File Upload */
-input[type="file"] {
-    color: white;
-    font-size: 0.85rem;
-}
-img.upload-thumb {
-    max-height: 80px;
-    border-radius: 6px;
-    margin-top: 5px;
-    box-shadow: 0 0 4px rgba(0,0,0,0.5);
-}
-.tiny-thumb {
-    width: 35px;
-    height: 35px;
-    object-fit: cover;
-    margin: 2px;
-    border-radius: 4px;
-    cursor: pointer;
-    box-shadow: 0 0 3px rgba(0,0,0,0.4);
-}
-
-.upload-btn {
-    background-color: #2f2f44;
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 18px;
-}
-
-/* GALLERY MODAL*/
-
-.gallery-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.8);
-    display: flex;
-    z-index: 1000;
-}
-
-.main-image {
-    flex: 3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-    .main-image img {
-        max-width: 90%;
-        max-height: 90%;
-        border-radius: 10px;
-        box-shadow: 0 0 10px #000;
-    }
-
-.sidebar-thumbs {
-    flex: 1;
-    overflow-y: auto;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-    .sidebar-thumbs .thumb {
-        width: 80px;
-        height: 80px;
-        object-fit: cover;
-        margin: 5px;
-        border-radius: 6px;
-        cursor: pointer;
-        border: 2px solid transparent;
-    }
-
-        .sidebar-thumbs .thumb:hover {
-            border: 2px solid #1dd1a1;
+        .salvage-board .btn-primary:hover {
+            background-color: #0060c0;
+            border-color: #0060c0;
         }
 
-/* DELETE BUTTON INSIDE GALLERY*/
-.gallery-thumb-container:hover {
-    position: relative;
-    display: inline-block;
-    margin: 6px 4px;
-}
-
-.thumb {
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.11);
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-    .thumb.selected-thumb {
-        border-color: #2196f3;
-        box-shadow: 0 2px 8px rgba(33,150,243,0.18);
+    .salvage-board .btn-secondary {
+        background-color: #ebedf5;
+        border-color: #dce0ea;
+        color: #323338;
     }
 
-.gallery-thumb-container:hover .delete-gallery-thumb {
-    display: flex;
-    opacity: 1;
+        .salvage-board .btn-secondary:hover {
+            background-color: #dce0ea;
+        }
+
+    /* Table styling */
+    .salvage-board .table {
+        border-collapse: separate;
+        border-spacing: 0;
+        border-radius: 8px;/* removing this: overflow: hidden; */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        margin-bottom: 20px;
+        background: white;
+    }
+
+        .salvage-board .table th {
+            background-color: #f5f6fa;
+            font-weight: 600;
+            color: #676879;
+            padding: 12px 16px;
+            border: none;
+            text-transform: capitalize;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .salvage-board .table td {
+            padding: 12px 16px;
+            border-top: 1px solid #ebedf5;
+            border-right: none;
+            border-left: none;
+            vertical-align: middle;
+        }
+
+    /* Column type label */
+    .salvage-board .column-type-label {
+        font-size: 11px;
+        color: #888;
+        font-weight: normal;
+        margin-left: 4px;
+    }
+
+    /* Row styling */
+    .salvage-board .data-row {
+        transition: background-color 0.2s;
+    }
+
+        .salvage-board .data-row:hover {
+            background-color: #f9f9fb;
+        }
+
+    /* Menu buttons */
+    .salvage-board .menu-btn {
+        background: none;
+        border: none;
+        color: #676879;
+        font-size: 16px;
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: 4px;
+    }
+
+        .salvage-board .menu-btn:hover {
+            background-color: #ebedf5;
+        }
+
+    /* Column menu */
+    .salvage-board .column-menu {
+        position: absolute;
+        right: 0;
+        top: 100%;
+        background: white;
+        border-radius: 4px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        z-index: 9;
+        min-width: 150px;
+        padding: 8px 0;
+    }
+
+        .salvage-board .column-menu .dropdown-item {
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: block;
+            width: 100%;
+            text-align: left;
+            border: none;
+            background: none;
+            font-size: 14px;
+        }
+
+            .salvage-board .column-menu .dropdown-item:hover {
+                background-color: #f5f6fa;
+            }
+
+    /* Row menu styling and action column*/
+    .salvage-board .row-menu-cell {
+        width: 40px;
+        min-width: 40px;
+        max-width: 40px;
+        padding: 8px;
+        text-align: center;
+    }
+
+    .salvage-board .row-menu-dropdown {
+        position: absolute;
+        background: white;
+        border-radius: 4px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        z-index: 9;
+        min-width: 150px;
+        padding: 8px 0;
+    }
+
+    /* File upload styling */
+    .salvage-board .file-cell {
+        position: relative;
+    }
+
+    /* trying to fix cell tooltip scroll issue here*/
+    .salvage-board .file-cell, .salvage-board .table td {
+        position: relative;
+        overflow: visible !important;
+    }
+    /*****/
+
+    .salvage-board .file-cell-images {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .salvage-board .tiny-thumb {
+        width: 32px;
+        height: 32px;
+        object-fit: cover;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+        .salvage-board .tiny-thumb:hover {
+            transform: scale(1.1);
+        }
+
+    .salvage-board .thumb-container {
+        position: relative;
+    }
+
+    .salvage-board .more-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 115, 234, 0.1);
+        color: #0073ea;
+        border-radius: 4px;
+        padding: 4px 8px;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    .salvage-board .upload-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        background-color: #ebedf5;
+        color: #676879;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 18px;
+    }
+
+        .salvage-board .upload-btn:hover {
+            background-color: #dce0ea;
+        }
+
+    /* Document links */
+    .salvage-board .doc-link {
+        display: block;
+        margin-bottom: 4px;
+    }
+
+        .salvage-board .doc-link a {
+            display: inline-flex;
+            align-items: center;
+            color: #0073ea;
+            text-decoration: none;
+            font-size: 14px;
+            gap: 8px;
+            padding: 4px 0;
+        }
+
+        .salvage-board .doc-link i {
+            font-size: 16px;
+        }
+
+    /* Modal styling */
+    .salvage-board .modal-content {
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        border: none;
+    }
+
+    .salvage-board .modal-header {
+        border-bottom: 1px solid #ebedf5;
+        padding: 16px 24px;
+    }
+
+    .salvage-board .modal-body {
+        padding: 24px;
+    }
+
+    .salvage-board .modal-footer {
+        border-top: 1px solid #ebedf5;
+        padding: 16px 24px;
+    }
+
+    .salvage-board .form-control,
+    .salvage-board .form-select {
+        border-radius: 4px;
+        border: 1px solid #dce0ea;
+        padding: 8px 12px;
+        transition: border-color 0.2s;
+    }
+
+        .salvage-board .form-control:focus,
+        .salvage-board .form-select:focus {
+            border-color: #0073ea;
+            box-shadow: 0 0 0 2px rgba(0, 115, 234, 0.2);
+        }
+
+    /* Gallery modal */
+    .salvage-board .gallery-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        z-index: 1050;
+        padding: 40px;
+    }
+
+    .salvage-board .main-image {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .salvage-board .main-image img {
+            max-width: 80%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+
+    .salvage-board .sidebar-thumbs {
+        width: 200px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        margin-left: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .salvage-board .gallery-thumb-container {
+        position: relative;
+    }
+
+    .salvage-board .thumb {
+        width: 100%;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+        .salvage-board .thumb:hover {
+            transform: scale(1.05);
+        }
+
+    .salvage-board .delete-gallery-thumb {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+    }
+
+        .salvage-board .delete-gallery-thumb:hover {
+            opacity: 1;
+        }
+
+    .salvage-board .close-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 32px;
+        cursor: pointer;
+    }
+
+/* Additional Fixes */
+
+/* Table container with horizontal scroll */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 20px;
 }
 
-.delete-gallery-thumb:hover {
-    background: #d32f2f;
-    opacity: 1;
+/* Prevent table from squeezing */
+.salvage-board .table {
+    width: 100%;
+    min-width: 800px; /* Ensures table doesn't get too small */
+    box-shadow: none; /* Remove shadow as container now has it */
+    margin-bottom: 0;
 }
 
-.delete-gallery-thumb {
-    display: none;
-    position: absolute;
-    top: 6px;
-    right: 6px;
-    width: 22px;
-    height: 22px;
-    background: rgba(33,33,33,0.8);
-    color: #fff;
-    border: none;
-    border-radius: 50%;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    opacity: 0.85;
-    transition: background 0.2s, opacity 0.2s;
-    z-index: 2;
-    /* --- FLEX CENTER --- */
-    display: none; /* will be overridden on hover */
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    line-height: 1;
+    /* Fixed minimum width for all columns */
+    .salvage-board .table th,
+    .salvage-board .table td {
+        min-width: 180px; /* min-width: 150px;  Minimum column width */
+        max-width: 300px; /* Optional: maximum width */
+    }
+
+/* Text overflow handling for cells */
+.salvage-board .table td:not(.file-cell) {
+    white-space: pre-line;/* removing this: overflow: hidden; */
+    text-overflow: ellipsis;
 }
 
-.close-btn {
-    position: absolute;
-    top: 15px;
-    right: 25px;
-    font-size: 30px;
-    background: transparent;
-    color: white;
-    border: none;
-    cursor: pointer;
+/* Ensure both header and cell have the same styling */
+.salvage-board .table th.row-menu-cell,
+.salvage-board .table td.row-menu-cell {
+    width: 40px ;
+    min-width: 40px;
+    max-width: 40px;
+    padding: 8px;
 }
 
+/* CELL TOOL TIP FOR SHOWING THE TEXT INSIDE THE CELL */
 
 
-.file-cell .upload-btn {
+/*************DEBUGGGINNNNGGG*/
+.input-tooltip-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.input-tooltip {
     visibility: hidden;
-    transition: 0.2s;
+    position: absolute;
+    top: 120%; /* was bottom: 120%; */
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 120px;
+    max-width: 320px;
+    max-height: 180px;
+    overflow-y: auto !important;
+    white-space: pre-line;
+    background: #23272e;
+    color: #fff;
+    text-align: left;
+    border-radius: 8px;
+    padding: 8px 16px;
+    z-index: 9999;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.17);
+    font-size: 1rem;
+    transition-delay: 1s;
 }
 
-.file-cell:hover .upload-btn {
-    visibility: visible;
+    .input-tooltip.active {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .tooltip-content {
+        max-height: 150px !important;
+        width: 280px !important;
+        overflow-y: auto !important;
+        white-space: pre-line;
+    }
+
+
+.table, .table * {
+    overflow: visible !important;
 }
 
-/* +n icon */
-.more-badge {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    background-color: rgba(0,0,0,0.6);
-    color: white;
-    display: inline-flex;
-    align-items: center;
-    vertical-align: middle;
-    justify-content: center;
-    font-weight: 500;
-    margin-left: 4px;
-    cursor: pointer;
-    font-size: 0.9rem;
+tbody, thead, tr {
+    overflow: visible !important;
+}
+.table-container {
+    overflow: visible !important;
 }
 
+.salvage-board .table td {
+    white-space: normal !important;
+}

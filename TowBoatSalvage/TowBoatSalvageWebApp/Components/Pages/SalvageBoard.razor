@@ -8,165 +8,259 @@
 
 @implements IAsyncDisposable
 
+<link href="~/salvage-board.css" rel="stylesheet" />
+<script>
+        document.addEventListener("DOMContentLoaded", function() {
+        // Handle hovering over input fields
+        document.body.addEventListener("mouseenter", function(e) {
+            // Check if hovering over an input inside a tooltip container
+            const container = e.target.closest('.input-tooltip-container');
+            if (container && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) {
+                const tooltip = container.querySelector('.input-tooltip');
+                if (tooltip) tooltip.classList.add('active');
+            }
+
+            // Also keep tooltip active when hovering the tooltip itself
+            if (e.target.classList.contains('input-tooltip') ||
+                e.target.closest('.input-tooltip')) {
+                const tooltip = e.target.classList.contains('input-tooltip') ?
+                                e.target : e.target.closest('.input-tooltip');
+                tooltip.classList.add('active');
+            }
+        }, true);
+
+        // Handle leaving elements
+        document.body.addEventListener("mouseleave", function(e) {
+            // Only remove active if we're leaving both the input and the tooltip
+            const container = e.target.closest('.input-tooltip-container');
+            if (container && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) {
+                // Don't remove if entering the tooltip
+                if (!e.relatedTarget || !e.relatedTarget.closest('.input-tooltip')) {
+                    const tooltip = container.querySelector('.input-tooltip');
+                    if (tooltip) tooltip.classList.remove('active');
+                }
+            }
+
+            // Handle leaving the tooltip itself
+            if (e.target.classList.contains('input-tooltip')) {
+                // Don't remove if entering the input
+                if (!e.relatedTarget || !e.relatedTarget.closest('.input-tooltip-container')) {
+                    e.target.classList.remove('active');
+                }
+            }
+        }, true);
+    });
+</script>
+
 <h3>Salvage Dispatch Table</h3>
 <h3>Developer Mode:</h3>
 <p>hoverRow: @hoverRow</p>
+<br />
+@* DEBUGGING HERE*@
+
+<span class="input-tooltip-container">
+    <input class="form-control" value="Try me!" />
+    <span class="input-tooltip">
+        <span >
+            @testingParagraph
+        </span>
+    </span>
+</span>
+
+
 
 <!-- Add Column Button -->
 <button class="btn btn-primary mb-3" @onclick="ShowAddColumnModal">+ Add Column</button>
+<br />
 
 <!-- Dynamic Table -->
-<table class="table table-bordered">
-    <thead>
-        <tr>
-                @foreach (var col in Columns)
-                {
-                    <th class="position-relative">
-                        <div class="d-flex justify-content-between align-items-center w-100">
-                            <div>
-                                @col.Label
-                                <span class="column-type-label">(@col.Type)</span>
-                            </div>
-                            <!--Three-dot icon -->
-                            <button class="menu-btn" @onclick="() => ShowColumnMenu(col.Id)" @onclick:stopPropagation>
-                            &#8942;
-                            </button>
-                        </div>
-                        
+<div class="salvage-board">
 
-                        <!-- Column menu -->
-                        @if (activeMenuColumnId == col.Id)
+    <!-- Wrap table in a scrollable container, this before was shrinking and getting to tight/bad UI-->
+    <div class="table-container">
+        <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="row-menu-cell">
+                            <!--leaving blank for action column-->
+                        </th>
+                        @foreach (var col in Columns)
                         {
-                            <div id="menu-@col.Id" class="column-menu">
-                            <button class="dropdown-item" @onclick="() => StartRenameColumn(col.Id)">Rename</button>
-                            <button class="dropdown-item text-danger" @onclick="() => DeleteColumn(col.Id)">Delete</button>
-                            </div>
-                        }
-                    </th>
-                }
-            
-            
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var row in Rows)
-        {
-            <tr>
-                @foreach (var col in Columns)
-                {
 
-                    /*@onmouseover="() => {hoverRow = row.Id; currentHoverRow = row; currentUploadColumn = col;}" @onmouseout="() => hoverRow = null */
-                    /*@onmouseleave="() => hoverRow = null"  // remove from under onmousenter because it's breaking the file upload */
-                    <td class="file-cell"
-                    >
-                        @if (col.Type == "FileUpload")
-                        {
-                            @* show up to 3 thumbnails *@
-                            var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
-                            var files = cell?.Files?.ToList() ?? new List<SalvageFile>();
+                            <th class="position-relative">
+                                <div class="d-flex justify-content-between align-items-center w-100">
+                                    <div>
+                                        @col.Label
+                                        <span class="column-type-label">(@col.Type)</span>
+                                    </div>
+                                    <!--Three-dot icon -->
+                                    <button class="menu-btn" @onclick="() => ShowColumnMenu(col.Id)" @onclick:stopPropagation>
+                                        &#8942;
+                                    </button>
+                                </div>
 
-                            @if (files.Count > 0)
-                            {
-                                var toShow =files.Count > 3 ? files.Take(3) : files;
-                                foreach (var file in toShow)
+
+                                <!-- Column menu -->
+                                @if (activeMenuColumnId == col.Id)
                                 {
-                                    <span class="thumb-container" style="position:relative; display:inline-block;">
-                                    <img src="@($"/salvage_uploads/{file.FileName}")"
-                                    @onclick="() => OpenGallery(files, file.FileName)"
-                                    class="tiny-thumb" />
-                                    </span>
+                                    <div id="menu-@col.Id" class="column-menu">
+                                        <button class="dropdown-item" @onclick="() => StartRenameColumn(col.Id)">Rename</button>
+                                        <button class="dropdown-item text-danger" @onclick="() => DeleteColumn(col.Id)">Delete</button>
+                                    </div>
                                 }
-                                @*If more than3, show +N badge*@
-                                if (files.Count > 3)
+                            </th>
+                        }
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in Rows)
+                    {
+                        <tr class="data-row"
+                            @onmouseover="@(() => hoverRow = row.Id)"
+                            @onmouseout="@(() => hoverRow = null)">
+
+                            <!-- Three-dot menu cell -->
+                            <td class="row-menu-cell">
+                                <button class="menu-btn"
+                                        style="visibility:@((hoverRow == row.Id) ? "visible" : "hidden")"
+                                        @onclick="(e => ShowRowMenu(row.Id, e))">
+                                    &#8942;
+                                </button>
+                                @if (activeRowMenuId == row.Id)
                                 {
-                                    <span class="more-badge" @onclick="() => OpenGallery(files, files.First().FileName)">
-                                        +@(files.Count - 3)
-                                    </span>
+                                    <div class="row-menu-dropdown">
+                                        <button class="dropdown-item text-danger" @onclick="() => DeleteRow(row.Id)">Delete Row</button>
+                                    </div>
                                 }
-                            }
-                            @* always show the upload Upload Button on hover *@
-                            
-                                <label class="upload-btn" @onclick:stopPropagation>
-                                    +
-                                    <InputFile OnChange="async e => UploadMultipleFiles(e, row.Id, col.Id)" multiple style="display:none"
-                                    @onclick:stopPropagation />
-                                </label>
-                            
-                        }
-                        else
-                        {
-                            @RenderCell(row, col) <!-- Use builder method for other types -->
-                        }
-                    </td>
-                    // file upload duplicating.. this cant go here
-                    <td class="file-cell">
-                        @* Document Upload *@
-                        @if (col.Type == "DocumentUpload")
-                        {
-                            var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
-                            var files = cell?.Files?.ToList() ?? new List<SalvageFile>();
-
-                            @foreach (var file in files)
+                            </td>
+                            @foreach (var col in Columns)
                             {
-                                // for view in browser
-                                // var baseUrl = "https://towboat.vnassar.com";
-                                // var baseUrl = "https://localhost:5010";
-                                var baseUrl = "https://localhost:5010";
-                                var fileUrl = $"{baseUrl}/salvage_uploads/{file.FileName}";
-                                var officeViewerUrl = $"https://view.officeapps.live.com/op/view.aspx?src={Uri.EscapeDataString(fileUrl)}";
+                                /*@onmouseover="() => {hoverRow = row.Id; currentHoverRow = row; currentUploadColumn = col;}" @onmouseout="() => hoverRow = null */
+                                /*@onmouseleave="() => hoverRow = null"  // remove from under onmousenter because it's breaking the file upload */
+                                <td class="file-cell">
 
-                                <span class="doc-link">
-                                    @if (file.FileType == "application/pdf")
-                                    {
-                                        // direct browser link
-                                        <a href="@($"/salvage_uploads/{file.FileName}")" target="_blank">
-                                            <i class="fade fa-file-pdf-o" style="color:#d32f2f"></i>
-                                            @file.OriginalName
-                                        </a>
-                                    }
-                                    else if (file.FileType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
-                                    file.FileType == "application/msword" ||
-                                    file.FileType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-                                    file.FileType == "application/vnd.openxmlformats-officedocument.presentationml.presentation" ||
-                                    file.FileType == "application/vnd.ms-excel")
-                                    {
-                                        // Word, Excel, PowerPoint: Office Online Viewer
+                                    <span class="file-cell-images">
+                                        @if (col.Type == "FileUpload")
+                                        {
+                                            @* show up to 3 thumbnails *@
+                                            var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
+                                            var files = cell?.Files?.ToList() ?? new List<SalvageFile>();
 
-                                        <a href="@officeViewerUrl" target="_blank" rel="noopener">
-                                            <i class="fa fa-file-word-o" style="color:#1976d2"></i>
-                                            @file.OriginalName
-                                        </a>
-                                    }
+                                            @if (files.Count > 0)
+                                            {
+                                                var toShow = files.Count > 3 ? files.Take(3) : files;
+                                                foreach (var file in toShow)
+                                                {
+                                                    <span class="thumb-container" style="position:relative; display:inline-block;">
+                                                        <img src="@($"/salvage_uploads/{file.FileName}")"
+                                                             @onclick="() => OpenGallery(files, file.FileName)"
+                                                             class="tiny-thumb" />
+                                                    </span>
+                                                }
+                                                @*If more than3, show +N badge*@
+                                                if (files.Count > 3)
+                                                {
+                                                    <span class="more-badge" @onclick="() => OpenGallery(files, files.First().FileName)">
+                                                        +@(files.Count - 3)
+                                                    </span>
+                                                }
+                                            }
+                                            @* always show the upload Upload Button on hover *@
+
+                                            <label class="upload-btn" @onclick:stopPropagation>
+                                                +
+                                                <InputFile OnChange="async e => UploadMultipleFiles(e, row.Id, col.Id)" multiple style="display:none"
+                                                           @onclick:stopPropagation />
+                                            </label>
+
+                                        }
+                                        @* Document Upload *@
+                                        else if (col.Type == "DocumentUpload")
+                                        {
+                                            var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
+                                            var files = cell?.Files?.ToList() ?? new List<SalvageFile>();
+
+                                            @foreach (var file in files)
+                                            {
+                                                // for view in browser
+                                                // var baseUrl = "https://towboat.vnassar.com";
+                                                // var baseUrl = "https://localhost:5010";
+                                                var baseUrl = "https://localhost:5010";
+                                                var fileUrl = $"{baseUrl}/salvage_uploads/{file.FileName}";
+                                                var officeViewerUrl = $"https://view.officeapps.live.com/op/view.aspx?src={Uri.EscapeDataString(fileUrl)}";
+
+                                                <span class="doc-link">
+                                                    @if (file.FileType == "application/pdf")
+                                                    {
+                                                        // direct browser link
+                                                        <a href="@($"/salvage_uploads/{file.FileName}")" target="_blank">
+                                                            <i class="fade fa-file-pdf-o" style="color:#d32f2f"></i>
+                                                            @file.OriginalName
+                                                        </a>
+                                                    }
+                                                    else if (file.FileType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+                                                    file.FileType == "application/msword" ||
+                                                    file.FileType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+                                                    file.FileType == "application/vnd.openxmlformats-officedocument.presentationml.presentation" ||
+                                                    file.FileType == "application/vnd.ms-excel")
+                                                    {
+                                                        // Word, Excel, PowerPoint: Office Online Viewer
+
+                                                        <a href="@officeViewerUrl" target="_blank" rel="noopener">
+                                                            <i class="fa fa-file-word-o" style="color:#1976d2"></i>
+                                                            @file.OriginalName
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        // Other file types: direct link
+                                                        <a href="@($"/salvage_uploads/{file.FileName}")" target="_blank">
+                                                            <i class="fa fa-file-o"></i>
+                                                            @file.OriginalName
+                                                        </a>
+                                                    }
+                                                </span>
+
+                                            }
+                                            <label class="upload-btn" @onclick:stopPropagation>
+                                                +
+                                                <InputFile OnChange="e => UploadDocumentFiles(e, row.Id, col.Id)" multiple style="display:none" @onclick:stopPropagation />
+                                            </label>
+                                        }
                                     else
-                                    {
-                                        // Other file types: direct link
-                                        <a href="@($"/salvage_uploads/{file.FileName}")" target="_blank">
-                                            <i class="fa fa-file-o"></i>
-                                            @file.OriginalName
-                                        </a>
-                                    }
-                                </span>
+                                        {
+                                        <span class="input-tooltip-container">
+                                            @RenderCell(row, col)
+                                            @{
+                                                var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
+                                                var value = cell?.Value ?? "";
+                                            }
+                                            @if (!string.IsNullOrWhiteSpace(value) && value.Length > 20)
+                                            {
+                                                <span class="input-tooltip">
+                                                    <div class="tooltip-content">
+                                                        @value
+                                                    </div>
+                                                </span>
+                                            }
+                                        </span>
+                                            
+                                            
+                                        }
+                                    </span>
 
+                                </td>
                             }
-                            <label class="upload-btn" @onclick:stopPropagation>
-                                +
-                                <InputFile OnChange="e => UploadDocumentFiles(e, row.Id, col.Id)" multiple style="display:none" @onclick:stopPropagation />
-                            </label>
-                        }
-                        else
-                        {
-                            @RenderCell(row, col) <!-- Use builder method for other types -->
-                        }
-                    </td>
-                }
-            </tr>
-        }
-    </tbody>
-    
-</table>
+                        </tr>
+                    }
+                </tbody>
+        </table>
+    </div>
 
 <!-- Add Row Button -->
-<button class="btn btn-secondary" @onclick="AddRow">+ Add Row</button>
+<button class="btn btn-secondary" @onclick="AddRow" disabled="@(!Columns.Any())">+ Add Row</button>
 
 <!-- Modal UI -->
 @if (isAddColumnModalOpen)
@@ -250,8 +344,14 @@
     </div>
 }
 
+</div>
 
-
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 
 
 
@@ -263,6 +363,7 @@
     private string newColumnLabel = string.Empty;
     private string newColumnType = "Text";
     private int? activeMenuColumnId = null;
+    private int? activeRowMenuId = null;
     private bool isRenaming = false;
     private string renameText = "";
     private int? editingColumndId = null;
@@ -276,6 +377,8 @@
     private SalvageColumn currentUploadColumn;
     private List<SalvageColumn> Columns;
     private List<SalvageRow> Rows;
+
+    private string testingParagraph = "Whats wrong? 1. something only works in chrome and edge, but not firefox or safari. 2, the structure is incorrect, input tooltip container but the tooltip will only saty open while either, the input cell is hoevered... or the tooltip isteslef is overed and only in browsers that support it. Whats wrong? 1. something only works in chrome and edge, but not firefox or safari. 2, the structure is incorrect, input tooltip container but the tooltip will only saty open while either, the input cell is hoevered... or the tooltip isteslef is overed and only in browsers that support it. Whats wrong? 1. something only works in chrome and edge, but not firefox or safari. 2, the structure is incorrect, input tooltip container but the tooltip will only saty open while either, the input cell is hoevered... or the tooltip isteslef is overed and only in browsers that support it";
 
 
 
@@ -305,8 +408,7 @@
             dotNetHelper = DotNetObjectReference.Create(this);
             }
         */
-
-        await JS.InvokeVoidAsync("registerClickOutside", dotNetHelper, $"menu-{columnId}");
+                await JS.InvokeVoidAsync("registerClickOutside", dotNetHelper, $"menu-{columnId}");
 
         StateHasChanged();
     }
@@ -322,6 +424,26 @@
     {
         dotNetHelper?.Dispose();
         return ValueTask.CompletedTask;
+    }
+
+    private void ShowRowMenu(int rowId, MouseEventArgs e)
+    {
+        activeRowMenuId = rowId;
+        StateHasChanged();
+    }
+
+    private void CloseRowMenu()
+    {
+        activeRowMenuId = null;
+        StateHasChanged();
+    }
+
+    private async Task DeleteRow(int rowId)
+    {
+        await TableService.DeleteRowAsync(rowId);
+        activeRowMenuId = null;
+        await LoadBoardAsync(); //needed because it renders again the database, StateHasChanged does not properly update it 
+
     }
 
     //===========Column Actions============
@@ -382,6 +504,13 @@
     //============Row ACtions==============
     private async Task AddRow()
     {
+        // first i have to check if any columns exist, otherwise i can create a bunch of extra rows without any columns present, sillY!
+        if (!Columns.Any())
+        {
+            Console.WriteLine("No columns exist!");
+            return; // stop and dont do anything if we dont have caolumns!
+        }
+
         await TableService.AddRowAsync();
         await LoadBoardAsync();
     }
@@ -389,69 +518,71 @@
     //=============Cell Rendering=============
     private RenderFragment RenderCell(SalvageRow row, SalvageColumn col) => builder =>
     {
-        builder.OpenElement(0, "div");
+        // builder.OpenElement(0, "div");
         //var value = row.CellValues.ContainsKey(col.Id) ? row.CellValues[col.Id] : "";
         var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
         var value = cell?.Value ?? "";
 
+        // starting the tooltip container here
+       // builder.OpenElement(0, "span");
+        //builder.AddAttribute(1, "class", "input-tooltip-container");
+
         switch (col.Type)
         {
-
             case "Status":
-                builder.OpenElement(1, "select");
-                builder.AddAttribute(2, "class", "form-select");
-                builder.AddAttribute(3, "value", value);
-                builder.AddAttribute(4, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, async e =>
-            {
-                await TableService.UpdateCellValueAsync(row.Id, col.Id, e.Value?.ToString() ?? "");
-                await LoadBoardAsync();
-            }));
-                builder.OpenElement(5, "option"); builder.AddContent(6, "Not Started"); builder.CloseElement();
-                builder.OpenElement(7, "option"); builder.AddContent(8, "In Progress"); builder.CloseElement();
-                builder.OpenElement(9, "option"); builder.AddContent(10, "Completed"); builder.CloseElement();
-                builder.CloseElement();
+                builder.OpenElement(0, "select");
+                builder.AddAttribute(1, "class", "form-select");
+                builder.AddAttribute(2, "value", value);
+                builder.AddAttribute(3, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, async e =>
+                {
+                    await TableService.UpdateCellValueAsync(row.Id, col.Id, e.Value?.ToString() ?? "");
+                    await LoadBoardAsync();
+                }));
+                builder.OpenElement(4, "option"); builder.AddContent(5, "Not Started"); builder.CloseElement();
+                builder.OpenElement(6, "option"); builder.AddContent(7, "In Progress"); builder.CloseElement();
+                builder.OpenElement(8, "option"); builder.AddContent(9, "Completed"); builder.CloseElement();
+                builder.CloseElement(); // close select
                 break;
 
             case "Date":
-                builder.OpenElement(11, "input");
-                builder.AddAttribute(12, "type", "date");
-                builder.AddAttribute(13, "class", "form-control");
-                builder.AddAttribute(14, "value", value);
-                builder.AddAttribute(15, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, async e =>
+                builder.OpenElement(10, "input");
+                builder.AddAttribute(11, "type", "date");
+                builder.AddAttribute(12, "class", "form-control");
+                builder.AddAttribute(13, "value", value);
+                builder.AddAttribute(14, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, async e =>
                 {
                     await TableService.UpdateCellValueAsync(row.Id, col.Id, e.Value?.ToString() ?? "");
                     await LoadBoardAsync();
                 }));
-                builder.CloseElement();
+                builder.CloseElement(); // close input
                 break;
 
             case "Number":
-                builder.OpenElement(16, "input");
-                builder.AddAttribute(17, "type", "number");
-                builder.AddAttribute(18, "class", "form-control");
-                builder.AddAttribute(19, "value", value);
-                builder.AddAttribute(20, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, async e =>
+                builder.OpenElement(15, "input");
+                builder.AddAttribute(16, "type", "number");
+                builder.AddAttribute(17, "class", "form-control");
+                builder.AddAttribute(18, "value", value);
+                builder.AddAttribute(19, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, async e =>
                 {
                     await TableService.UpdateCellValueAsync(row.Id, col.Id, e.Value?.ToString() ?? "");
                     await LoadBoardAsync();
                 }));
-                builder.CloseElement();
+                builder.CloseElement(); // close input
                 break;
 
             default: // Text or fallback
-                builder.OpenElement(21, "input");
-                builder.AddAttribute(22, "type", "text");
-                builder.AddAttribute(23, "class", "form-control");
-                builder.AddAttribute(24, "value", value);
-                builder.AddAttribute(25, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, async e =>
+                builder.OpenElement(20, "input");
+                builder.AddAttribute(21, "type", "text");
+                builder.AddAttribute(22, "class", "form-control");
+                builder.AddAttribute(23, "value", value);
+                builder.AddAttribute(24, "onchange", EventCallback.Factory.Create<ChangeEventArgs>(this, async e =>
                 {
                     await TableService.UpdateCellValueAsync(row.Id, col.Id, e.Value?.ToString() ?? "");
                     await LoadBoardAsync();
                 }));
-                builder.CloseElement();
+                builder.CloseElement(); // close input
                 break;
         }
-        builder.CloseElement(); // outer div
     };
 
     //======================File Upload=============

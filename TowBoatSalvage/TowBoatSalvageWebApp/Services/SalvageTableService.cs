@@ -80,6 +80,7 @@ namespace TowBoatSalvageWebApp.Services
         //add new row and auto-create empty cell for each 
         public async Task<SalvageRow> AddRowAsync()
         {
+
             var row = new SalvageRow();
             _db.Rows.Add(row);
 
