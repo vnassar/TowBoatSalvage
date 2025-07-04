@@ -57,14 +57,10 @@
 <p>hoverRow: @hoverRow</p>
 <br />
 @* DEBUGGING HERE*@
-<span class="input-tooltip-container">
-    <input class="form-control" value="Try me!" />
-    <span class="input-tooltip">
-        <span >
-            @testingParagraph
-        </span>
-    </span>
-</span>
+
+
+
+
 <!-- Add Column Button -->
 <button class="btn btn-primary mb-3" @onclick="ShowAddColumnModal">+ Add Column</button>
 <br />
@@ -121,13 +117,14 @@
                             <td class="row-menu-cell">
                                 <button class="menu-btn"
                                         style="visibility:@((hoverRow == row.Id) ? "visible" : "hidden")"
-                                        @onclick="(e => ShowRowMenu(row.Id, e))">
+                                        @onclick="(e => ShowRowMenu(row.Id, e))" @onclick:stopPropagation>
                                     &#8942;
                                 </button>
                                 @if (activeRowMenuId == row.Id)
                                 {
                                     <div class="row-menu-dropdown">
                                         <button class="dropdown-item text-danger" @onclick="() => DeleteRow(row.Id)">Delete Row</button>
+                                        <button class="dropdown-item text-danger" @onclick="() => DeleteRow(row.Id)">Quick Entry</button> @*Quick entry => parser here*@
                                     </div>
                                 }
                             </td>
@@ -230,10 +227,33 @@
                                             </label>
                                         </span>
                                     </td>
-                                            
 
+
+                                }
+                            else if (col.Type == "LongText")
+                            {
+                                var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id); //figure out where we are 
+                                var value = cell?.Value ?? ""; // once we know which cell we are, whats our value? if null make it empty
+
+                                <td class="file-cell">
+                                    <span class="input-tooltip-container">
+                                        <input class="form-control"
+                                            readonly
+                                            value="@value"
+                                            style="cursor:pointer"
+                                            @onclick="() => OpenLongTextModal(row, col)" />
+                                        @if (!string.IsNullOrWhiteSpace(value) && value.Length > 15)
+                                        {
+                                            <span class="input-tooltip">
+                                                <div class="tooltip-content">
+                                                    @value
+                                                </div>
+                                            </span>
                                         }
-                                else
+                                    </span>
+                                </td>
+                            }
+                            else
                                 {
                                     <td class="file-cell">
                                         <span class="input-tooltip-container">
@@ -284,6 +304,7 @@
                     <label class="mt-3">Column Type</label>
                     <select class="form-select" @bind="newColumnType">
                         <option value="Text">Text</option>
+                        <option value="LongText">Long Text</option>
                         <option value="Status">Status</option>
                         <option value="Dropdown">Dropdown</option>
                         <option value="Date">Date</option>
@@ -348,6 +369,32 @@
     </div>
 }
 
+@if (isLongTextModalOpen)
+    {
+        
+            <div class="longtext-modal-backdrop"></div>
+            <div class="longtext-modal ">
+                <div class="longtext-modal-dialog">
+                    <div class="longtext-modal-content">
+                        <div class="longtext-modal-header">
+                            <h5 class="modal-title">Edit Text</h5>
+                            <button type="button" class="close-btn" @onclick="CloseLongTextModal">x</button>
+                        </div>
+                        <div class="longtext-modal-body">
+                            <textarea class="form-control"
+                                style="min-height:400px; width:100%;font-size:1.1rem"
+                                @bind="editingLongText">
+                            </textarea>
+                        </div>
+                        <div class="longtext-modal-footer">
+                            <button class="btn btn-secondary" @onclick="CloseLongTextModal">Cancel</button>
+                            <button class="btn btn-primary" @onclick="SaveLongTextModal">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    }
+
 </div>
 
 <br />
@@ -381,8 +428,11 @@
     private SalvageColumn currentUploadColumn;
     private List<SalvageColumn> Columns;
     private List<SalvageRow> Rows;
+    private bool isLongTextModalOpen = false;
+    private string editingLongText = "";
+    private SalvageRow? editingLongTextRow;
+    private SalvageColumn? editingLongTextCol;
 
-    private string testingParagraph = "Whats wrong? 1. something only works in chrome and edge, but not firefox or safari. 2, the structure is incorrect, input tooltip container but the tooltip will only saty open while either, the input cell is hoevered... or the tooltip isteslef is overed and only in browsers that support it. Whats wrong? 1. something only works in chrome and edge, but not firefox or safari. 2, the structure is incorrect, input tooltip container but the tooltip will only saty open while either, the input cell is hoevered... or the tooltip isteslef is overed and only in browsers that support it. Whats wrong? 1. something only works in chrome and edge, but not firefox or safari. 2, the structure is incorrect, input tooltip container but the tooltip will only saty open while either, the input cell is hoevered... or the tooltip isteslef is overed and only in browsers that support it";
 
 
 
@@ -412,7 +462,7 @@
             dotNetHelper = DotNetObjectReference.Create(this);
             }
         */
-                await JS.InvokeVoidAsync("registerClickOutside", dotNetHelper, $"menu-{columnId}");
+        await JS.InvokeVoidAsync("registerClickOutside", dotNetHelper, $"menu-{columnId}");
 
         StateHasChanged();
     }
@@ -517,6 +567,33 @@
 
         await TableService.AddRowAsync();
         await LoadBoardAsync();
+    }
+
+    private void OpenLongTextModal(SalvageRow row, SalvageColumn col)
+    {
+        var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id); 
+        editingLongText = cell?.Value ?? ""; // get the cells value, if null, set to empty string
+        editingLongTextRow = row; // which row are we in
+        editingLongTextCol = col; // which col are we in
+        isLongTextModalOpen = true; // our modal can turn visible
+    }
+
+    private void CloseLongTextModal()
+    {
+        isLongTextModalOpen = false; //close our modal
+        editingLongText = ""; //clear w/e here
+        editingLongTextRow = null; //clear this
+        editingLongTextCol = null; //this too
+    }
+
+    private async Task SaveLongTextModal()
+    {
+        if (editingLongText != null && editingLongTextCol != null)
+        {
+            await TableService.UpdateCellValueAsync(editingLongTextRow.Id, editingLongTextCol.Id, editingLongText); // save
+            await LoadBoardAsync(); // then load cells and show new saved value
+        }
+        CloseLongTextModal(); // close modal after saving and go back to main view
     }
 
     //=============Cell Rendering=============

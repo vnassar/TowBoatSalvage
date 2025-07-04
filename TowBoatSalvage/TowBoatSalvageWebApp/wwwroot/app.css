@@ -471,9 +471,6 @@ h1:focus {
 }
 
 /* CELL TOOL TIP FOR SHOWING THE TEXT INSIDE THE CELL */
-
-
-/*************DEBUGGGINNNNGGG*/
 .input-tooltip-container {
     position: relative;
     display: inline-block;
@@ -531,4 +528,88 @@ tbody, thead, tr {
 
 .salvage-board .table td {
     white-space: normal !important;
+}
+
+
+/********* MODAL FOR LONG TEXT ******************/
+.longtext-modal-backdrop {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(40, 40, 60, 0.42);
+    z-index: 1040;
+    backdrop-filter: blur(3px);
+}
+
+.longtext-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050;
+}
+
+.longtext-modal-dialog {
+    width: 100%;
+    max-width: 700px;
+    min-width: 340px;
+}
+
+.longtext-modal-content {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 40px rgba(40, 40, 80, 0.15);
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #eaeaea;
+    min-height: 250px;
+}
+
+.longtext-modal-header, .longtext-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 26px;
+    background: #eaeaea;
+    border-bottom: 1px solid #eaeaea;
+    border-radius: 0;
+}
+
+.longtext-modal-header {
+    border-radius: 16px 16px 0 0;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.longtext-modal-body {
+    padding: 26px 26px 18px 26px;
+    background: #fff;
+    flex: 1 1 auto;
+}
+
+.longtext-modal-footer {
+    border-top: 1px solid #eaeaea;
+    border-radius: 0 0 16px 16px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    color: #e50000;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 8px;
+    transition: color 0.18s;
+}
+
+.close-btn:hover {
+    color: #222;
+}
+
+.modal-title {
 }
