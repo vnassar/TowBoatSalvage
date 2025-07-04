@@ -219,6 +219,22 @@ h1:focus {
         padding: 8px 0;
     }
 
+    .salvage-board .row-menu-dropdown .dropdown-item {
+        padding: 8px 16px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        display: block;
+        width: 100%;
+        text-align: left;
+        border: none;
+        background: none;
+        font-size: 14px;
+    }
+
+        .salvage-board .row-menu-dropdown .dropdown-item:hover {
+            background-color: #f5f6fa;
+        }
+
     /* File upload styling */
     .salvage-board .file-cell {
         position: relative;

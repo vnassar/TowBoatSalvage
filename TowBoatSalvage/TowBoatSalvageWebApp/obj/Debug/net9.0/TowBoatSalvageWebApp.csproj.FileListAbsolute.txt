@@ -180,7 +180,6 @@ C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalv
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\scopedcss\Components\Layout\NavMenu.razor.rz.scp.css
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\scopedcss\bundle\TowBoatSalvageWebApp.styles.css
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\scopedcss\projectbundle\TowBoatSalvageWebApp.bundle.scp.css
-C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\compressed\zp6gbi7m47-qc52f8j629.gz
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\compressed\quo2apktw6-8mb014295a.gz
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\compressed\myv7dohera-bqjiyaj88i.gz
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\compressed\n3kaads3hv-c2jlpeoesf.gz
@@ -239,7 +238,6 @@ C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalv
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\TowBoatSalvageWebApp.pdb
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\TowBoatSalvageWebApp.genruntimeconfig.cache
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\ref\TowBoatSalvageWebApp.dll
-C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\compressed\inx8qzgsre-y3qlgnl5nj.gz
 C:\Users\vnassar\Desktop\Github\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\bin\Debug\net9.0\appsettings.Development.json
 C:\Users\vnassar\Desktop\Github\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\bin\Debug\net9.0\appsettings.json
 C:\Users\vnassar\Desktop\Github\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\bin\Debug\net9.0\TowBoatSalvageWebApp.staticwebassets.runtime.json
@@ -486,3 +484,5 @@ C:\Users\vnassar\Desktop\Github\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebA
 C:\Users\vnassar\Desktop\Github\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\TowBoatSalvageWebApp.genruntimeconfig.cache
 C:\Users\vnassar\Desktop\Github\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\ref\TowBoatSalvageWebApp.dll
 C:\Users\vnassar\Desktop\Github\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\compressed\inx8qzgsre-f4zsxl4gc3.gz
+C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\compressed\inx8qzgsre-f4zsxl4gc3.gz
+C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\compressed\zp6gbi7m47-ownd7f94p1.gz

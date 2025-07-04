@@ -120,11 +120,13 @@
                                         @onclick="(e => ShowRowMenu(row.Id, e))" @onclick:stopPropagation>
                                     &#8942;
                                 </button>
+                                <!--Row Menu-->
                                 @if (activeRowMenuId == row.Id)
                                 {
-                                    <div class="row-menu-dropdown">
+                                    @*row-menu-dropdown*@
+                                    <div id="row-menu-@row.Id" class="row-menu-dropdown">
+                                        <button class="dropdown-item" @onclick="() => DeleteRow(row.Id)">Quick Entry</button> @*Quick entry => parser here*@
                                         <button class="dropdown-item text-danger" @onclick="() => DeleteRow(row.Id)">Delete Row</button>
-                                        <button class="dropdown-item text-danger" @onclick="() => DeleteRow(row.Id)">Quick Entry</button> @*Quick entry => parser here*@
                                     </div>
                                 }
                             </td>
@@ -467,10 +469,33 @@
         StateHasChanged();
     }
 
+    private async Task ShowRowMenu(int rowId, MouseEventArgs e)
+    {
+        activeRowMenuId = rowId;
+
+        /*
+        * having error with this during file upload
+        if (dotNetHelper is null)
+        {
+            dotNetHelper = DotNetObjectReference.Create(this);
+            }
+        */
+        await JS.InvokeVoidAsync("registerClickOutsideRow", dotNetHelper, $"row-menu-{rowId}");
+
+        StateHasChanged();
+    }
+
     [JSInvokable]
     public void CloseColumnMenu()
     {
         activeMenuColumnId = null;
+        StateHasChanged();
+    }
+
+    [JSInvokable]
+    public void CloseRowMenu()
+    {
+        activeRowMenuId = null;
         StateHasChanged();
     }
 
@@ -480,13 +505,13 @@
         return ValueTask.CompletedTask;
     }
 
-    private void ShowRowMenu(int rowId, MouseEventArgs e)
+    private void ShowRowMenuOld(int rowId, MouseEventArgs e)
     {
         activeRowMenuId = rowId;
         StateHasChanged();
     }
 
-    private void CloseRowMenu()
+    private void CloseRowMenuOld()
     {
         activeRowMenuId = null;
         StateHasChanged();
