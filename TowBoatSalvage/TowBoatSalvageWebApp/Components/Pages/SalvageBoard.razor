@@ -15,7 +15,7 @@
         document.body.addEventListener("mouseenter", function(e) {
             // Check if hovering over an input inside a tooltip container
             const container = e.target.closest('.input-tooltip-container');
-            if (container && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) {
+            if (container) {
                 const tooltip = container.querySelector('.input-tooltip');
                 if (tooltip) tooltip.classList.add('active');
             }
@@ -33,7 +33,7 @@
         document.body.addEventListener("mouseleave", function(e) {
             // Only remove active if we're leaving both the input and the tooltip
             const container = e.target.closest('.input-tooltip-container');
-            if (container && (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT')) {
+            if (container) {
                 // Don't remove if entering the tooltip
                 if (!e.relatedTarget || !e.relatedTarget.closest('.input-tooltip')) {
                     const tooltip = container.querySelector('.input-tooltip');
@@ -57,7 +57,6 @@
 <p>hoverRow: @hoverRow</p>
 <br />
 @* DEBUGGING HERE*@
-
 <span class="input-tooltip-container">
     <input class="form-control" value="Try me!" />
     <span class="input-tooltip">
@@ -66,9 +65,6 @@
         </span>
     </span>
 </span>
-
-
-
 <!-- Add Column Button -->
 <button class="btn btn-primary mb-3" @onclick="ShowAddColumnModal">+ Add Column</button>
 <br />
@@ -139,14 +135,15 @@
                             {
                                 /*@onmouseover="() => {hoverRow = row.Id; currentHoverRow = row; currentUploadColumn = col;}" @onmouseout="() => hoverRow = null */
                                 /*@onmouseleave="() => hoverRow = null"  // remove from under onmousenter because it's breaking the file upload */
-                                <td class="file-cell">
-
+                                @if (col.Type == "FileUpload")
+                                {
+                                    <td class="file-cell">
                                     <span class="file-cell-images">
-                                        @if (col.Type == "FileUpload")
-                                        {
                                             @* show up to 3 thumbnails *@
+                                            @{
                                             var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
                                             var files = cell?.Files?.ToList() ?? new List<SalvageFile>();
+                                            }
 
                                             @if (files.Count > 0)
                                             {
@@ -174,14 +171,17 @@
                                                 <InputFile OnChange="async e => UploadMultipleFiles(e, row.Id, col.Id)" multiple style="display:none"
                                                            @onclick:stopPropagation />
                                             </label>
-
-                                        }
-                                        @* Document Upload *@
-                                        else if (col.Type == "DocumentUpload")
-                                        {
-                                            var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
-                                            var files = cell?.Files?.ToList() ?? new List<SalvageFile>();
-
+                                    </span>
+                                </td>
+                                }
+                                else if (col.Type == "DocumentUpload")
+                                {
+                                    <td class="file-cell">
+                                        <span class="file-cell-images">
+                                            @{
+                                                var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
+                                                var files = cell?.Files?.ToList() ?? new List<SalvageFile>();
+                                            }
                                             @foreach (var file in files)
                                             {
                                                 // for view in browser
@@ -228,31 +228,35 @@
                                                 +
                                                 <InputFile OnChange="e => UploadDocumentFiles(e, row.Id, col.Id)" multiple style="display:none" @onclick:stopPropagation />
                                             </label>
+                                        </span>
+                                    </td>
+                                            
+
                                         }
-                                    else
-                                        {
+                                else
+                                {
+                                    <td class="file-cell">
                                         <span class="input-tooltip-container">
                                             @RenderCell(row, col)
                                             @{
                                                 var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
                                                 var value = cell?.Value ?? "";
                                             }
-                                            @if (!string.IsNullOrWhiteSpace(value) && value.Length > 20)
+                                            @if (!string.IsNullOrWhiteSpace(value) && value.Length > 15)
                                             {
                                                 <span class="input-tooltip">
-                                                    <div class="tooltip-content">
+                                                    <span>
                                                         @value
-                                                    </div>
+                                                    </span>
                                                 </span>
                                             }
                                         </span>
-                                            
-                                            
-                                        }
-                                    </span>
+                                    </td>
+                                }
 
-                                </td>
                             }
+
+                            
                         </tr>
                     }
                 </tbody>

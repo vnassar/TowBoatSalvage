@@ -11,16 +11,24 @@
       "RelativeMoniker": "D:0:0:{8A111A53-0A87-402C-90C4-633BBFD12602}|TowBoatSalvageWebApp\\TowBoatSalvageWebApp.csproj|solutionrelative:towboatsalvagewebapp\\wwwroot\\app.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{8A111A53-0A87-402C-90C4-633BBFD12602}|TowBoatSalvageWebApp\\TowBoatSalvageWebApp.csproj|c:\\users\\vnass\\desktop\\projects\\github\\towboatsalvage\\towboatsalvage\\towboatsalvagewebapp\\components\\pages\\tooltip.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8A111A53-0A87-402C-90C4-633BBFD12602}|TowBoatSalvageWebApp\\TowBoatSalvageWebApp.csproj|solutionrelative:towboatsalvagewebapp\\components\\pages\\tooltip.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A111A53-0A87-402C-90C4-633BBFD12602}|TowBoatSalvageWebApp\\TowBoatSalvageWebApp.csproj|c:\\users\\vnass\\desktop\\projects\\github\\towboatsalvage\\towboatsalvage\\towboatsalvagewebapp\\wwwroot\\js\\tooltip.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{8A111A53-0A87-402C-90C4-633BBFD12602}|TowBoatSalvageWebApp\\TowBoatSalvageWebApp.csproj|solutionrelative:towboatsalvagewebapp\\wwwroot\\js\\tooltip.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A111A53-0A87-402C-90C4-633BBFD12602}|TowBoatSalvageWebApp\\TowBoatSalvageWebApp.csproj|c:\\users\\vnass\\desktop\\projects\\github\\towboatsalvage\\towboatsalvage\\towboatsalvagewebapp\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8A111A53-0A87-402C-90C4-633BBFD12602}|TowBoatSalvageWebApp\\TowBoatSalvageWebApp.csproj|solutionrelative:towboatsalvagewebapp\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{8A111A53-0A87-402C-90C4-633BBFD12602}|TowBoatSalvageWebApp\\TowBoatSalvageWebApp.csproj|c:\\users\\vnass\\desktop\\projects\\github\\towboatsalvage\\towboatsalvage\\towboatsalvagewebapp\\services\\salvagetableservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8A111A53-0A87-402C-90C4-633BBFD12602}|TowBoatSalvageWebApp\\TowBoatSalvageWebApp.csproj|solutionrelative:towboatsalvagewebapp\\services\\salvagetableservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8A111A53-0A87-402C-90C4-633BBFD12602}|TowBoatSalvageWebApp\\TowBoatSalvageWebApp.csproj|c:\\users\\vnass\\desktop\\projects\\github\\towboatsalvage\\towboatsalvage\\towboatsalvagewebapp\\wwwroot\\js\\scripts.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{8A111A53-0A87-402C-90C4-633BBFD12602}|TowBoatSalvageWebApp\\TowBoatSalvageWebApp.csproj|solutionrelative:towboatsalvagewebapp\\wwwroot\\js\\scripts.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8A111A53-0A87-402C-90C4-633BBFD12602}|TowBoatSalvageWebApp\\TowBoatSalvageWebApp.csproj|c:\\users\\vnass\\desktop\\projects\\github\\towboatsalvage\\towboatsalvage\\towboatsalvagewebapp\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{8A111A53-0A87-402C-90C4-633BBFD12602}|TowBoatSalvageWebApp\\TowBoatSalvageWebApp.csproj|solutionrelative:towboatsalvagewebapp\\components\\app.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8A111A53-0A87-402C-90C4-633BBFD12602}|TowBoatSalvageWebApp\\TowBoatSalvageWebApp.csproj|c:\\users\\vnass\\desktop\\projects\\github\\towboatsalvage\\towboatsalvage\\towboatsalvagewebapp\\components\\routes.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -86,7 +94,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -98,28 +106,54 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "SalvageBoard.razor",
-              "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\Components\\Pages\\SalvageBoard.razor",
-              "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\Components\\Pages\\SalvageBoard.razor",
-              "ToolTip": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\Components\\Pages\\SalvageBoard.razor",
-              "RelativeToolTip": "TowBoatSalvageWebApp\\Components\\Pages\\SalvageBoard.razor",
-              "ViewState": "AgIAAOIAAAAAAAAAAAAAAPAAAAAtAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-17T01:39:17.675Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 1,
               "Title": "app.css",
               "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\wwwroot\\app.css",
               "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\wwwroot\\app.css",
               "ToolTip": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\wwwroot\\app.css",
               "RelativeToolTip": "TowBoatSalvageWebApp\\wwwroot\\app.css",
-              "ViewState": "AgIAANIAAAAAAAAAAAAqwOUAAAAlAAAAAAAAAA==",
+              "ViewState": "AgIAANoBAAAAAAAAAAAmwOQBAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
               "WhenOpened": "2025-05-18T00:01:46.727Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Tooltip.razor",
+              "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\Components\\Pages\\Tooltip.razor",
+              "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\Components\\Pages\\Tooltip.razor",
+              "ToolTip": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\Components\\Pages\\Tooltip.razor",
+              "RelativeToolTip": "TowBoatSalvageWebApp\\Components\\Pages\\Tooltip.razor",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAgwCgAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-03T22:43:10.456Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "tooltip.js",
+              "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\wwwroot\\js\\tooltip.js",
+              "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\wwwroot\\js\\tooltip.js",
+              "ToolTip": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\wwwroot\\js\\tooltip.js",
+              "RelativeToolTip": "TowBoatSalvageWebApp\\wwwroot\\js\\tooltip.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-07-03T22:44:00.48Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SalvageBoard.razor",
+              "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\Components\\Pages\\SalvageBoard.razor",
+              "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\Components\\Pages\\SalvageBoard.razor",
+              "ToolTip": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\Components\\Pages\\SalvageBoard.razor",
+              "RelativeToolTip": "TowBoatSalvageWebApp\\Components\\Pages\\SalvageBoard.razor",
+              "ViewState": "AgIAADQCAAAAAAAAAAAQwG8BAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-17T01:39:17.675Z",
               "EditorCaption": ""
             },
             {
@@ -130,13 +164,14 @@
               "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\Components\\App.razor",
               "ToolTip": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\Components\\App.razor",
               "RelativeToolTip": "TowBoatSalvageWebApp\\Components\\App.razor",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-18T02:10:32.261Z"
+              "WhenOpened": "2025-05-18T02:10:32.261Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "Routes.razor",
               "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\Components\\Routes.razor",
               "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\Components\\Routes.razor",
@@ -148,7 +183,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "SalvageTableService.cs",
               "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\Services\\SalvageTableService.cs",
               "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\Services\\SalvageTableService.cs",
@@ -160,7 +195,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "appsettings.Development.json",
               "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\appsettings.Development.json",
               "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\appsettings.Development.json",
@@ -172,7 +207,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "scripts.js",
               "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\wwwroot\\js\\scripts.js",
               "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\wwwroot\\js\\scripts.js",
@@ -184,7 +219,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "_Imports.razor",
               "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\Components\\_Imports.razor",
               "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\Components\\_Imports.razor",
@@ -196,7 +231,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\appsettings.json",
               "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\appsettings.json",
@@ -208,7 +243,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\Program.cs",
               "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\Program.cs",
@@ -220,7 +255,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 13,
               "Title": "launchSettings.json",
               "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\Properties\\launchSettings.json",
@@ -232,7 +267,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
               "Title": "Notes.razor",
               "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\Components\\Pages\\Notes.razor",
               "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\Components\\Pages\\Notes.razor",
@@ -244,7 +279,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 16,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\Data\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\Data\\ApplicationDbContext.cs",
@@ -256,7 +291,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 14,
               "Title": "SalvageFile.cs",
               "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\Models\\SalvageFile.cs",
               "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\Models\\SalvageFile.cs",
@@ -268,7 +303,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 15,
               "Title": "SalvageDbContext.cs",
               "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\Data\\SalvageDbContext.cs",
               "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\Data\\SalvageDbContext.cs",
@@ -280,7 +315,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 17,
               "Title": "SalvageRow.cs",
               "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\Models\\SalvageRow.cs",
               "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\Models\\SalvageRow.cs",
@@ -292,7 +327,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 18,
               "Title": "SalvageCell.cs",
               "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\Models\\SalvageCell.cs",
               "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\Models\\SalvageCell.cs",
@@ -304,7 +339,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 19,
               "Title": "SalvageColumn.cs",
               "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\Models\\SalvageColumn.cs",
               "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\Models\\SalvageColumn.cs",
@@ -316,7 +351,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 20,
               "Title": "ApplicationUser.cs",
               "DocumentMoniker": "C:\\Users\\vnass\\Desktop\\Projects\\GitHub\\TowBoatSalvage\\TowBoatSalvage\\TowBoatSalvageWebApp\\Data\\ApplicationUser.cs",
               "RelativeDocumentMoniker": "TowBoatSalvageWebApp\\Data\\ApplicationUser.cs",

@@ -1,0 +1,45 @@
+﻿@using Microsoft.JSInterop
+@implements IAsyncDisposable
+
+<div class="input-tooltip-container">
+    @ChildContent
+    @if (!string.IsNullOrWhiteSpace(Text) && Text.Length > 20)
+    {
+        <div class="input-tooltip">
+            <div class="tooltip-content">
+                @Text
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Text { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Inject]
+    private IJSRuntime JSRuntime { get; set; }
+
+    private IJSObjectReference module;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/tooltip.js");
+            await module.InvokeVoidAsync("initializeTooltips");
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (module is not null)
+        {
+            await module.InvokeVoidAsync("disposeTooltips");
+            await module.DisposeAsync();
+        }
+    }
+}
