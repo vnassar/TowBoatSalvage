@@ -1,4 +1,5 @@
 ﻿@page "/salvage-board"
+@using TowBoatSalvageWebApp.Data
 @using TowBoatSalvageWebApp.Models
 @using TowBoatSalvageWebApp.Services
 @using Microsoft.AspNetCore.Components.Forms
@@ -9,6 +10,8 @@
 @implements IAsyncDisposable
 
 <link href="~/salvage-board.css" rel="stylesheet" />
+
+@*JS for tooltip*@
 <script>
         document.addEventListener("DOMContentLoaded", function() {
         // Handle hovering over input fields
@@ -52,9 +55,24 @@
     });
 </script>
 
+<PageTitle>Dashboard</PageTitle>
+
+@*Dashboard****************@
+<div class="dashboard-section">
+    <div class="dashboard-header">
+        <span class="dashboard-title">Dashboard Overview</span>
+        <div class="dashboard-filters">
+            <select class="dashboard-select" @bind="selectedYear">
+
+            </select>
+        </div>
+    </div>
+</div>
+
 <h3>Salvage Dispatch Table</h3>
 <h3>Developer Mode:</h3>
 <p>hoverRow: @hoverRow</p>
+<p>@errors</p>
 <br />
 @* DEBUGGING HERE*@
 
@@ -125,7 +143,7 @@
                                 {
                                     @*row-menu-dropdown*@
                                     <div id="row-menu-@row.Id" class="row-menu-dropdown">
-                                        <button class="dropdown-item" @onclick="() => DeleteRow(row.Id)">Quick Entry</button> @*Quick entry => parser here*@
+                                        <button class="dropdown-item" @onclick="() => OpenQuickEntryModal(row.Id)">Quick Entry</button> @*Quick entry => parser here*@
                                         <button class="dropdown-item text-danger" @onclick="() => DeleteRow(row.Id)">Delete Row</button>
                                     </div>
                                 }
@@ -397,6 +415,45 @@
             </div>
     }
 
+@if (isQuickEntryModalOpen)
+    {
+        <div class="longtext-modal-backdrop"></div>
+        <div class="longtext-modal">
+            <div class="longtext-modal-dialog">
+                <div class="longtext-modal-content">
+                    <div class="longtext-modal-header">
+                        <h5 class="modal-title">Quick Entry</h5>
+                        <button type="button" class="close-btn" @onclick="CloseQuickEntryModal">x</button>
+                    </div>
+                    <div class="longtext-modal-body">
+                        <textarea class="form-control"
+                            style="min-height 400px; width:100%;font-size:1.05rem"
+                            @bind="quickEntryInput">
+                        </textarea>
+                        <div class="mt-3">
+                            <button class="butn btn-secondary" @onclick="ParseQuickEntry">Parse</button>
+                        </div>
+                        @if (quickEntry != null)
+                        {
+                            <div class="mt-4 p-3 border rounded" style="background:#f6f7fb">
+                                <b>Preview Parsed Fields:</b>
+                                <div>Date: <span>@quickEntry.Date</span></div>
+                                <div>Dispatch #: <span>@quickEntry.DispatchNumber</span></div>
+                                <div>Claim #: <span>@quickEntry.IncidentNumber</span></div>
+                                <div>Make: <span>@quickEntry.Make</span></div>
+                                <div>Model: <span>@quickEntry.Model</span></div>
+                                <div>Length: <span>@quickEntry.Length</span></div>
+                                <div>Member: <span>@quickEntry.CustomerNumber</span></div>
+                                <div>Customer Name: <span>@quickEntry.CustomerName</span></div>
+                                <div>Phone #: <span>@quickEntry.PhoneNumber</span></div>
+                            </div>
+                            <button class="btn btn-success mt-3" @onclick="ApplyQuickEntryToRow">Apply Parsed Data</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 
 <br />
@@ -434,6 +491,11 @@
     private string editingLongText = "";
     private SalvageRow? editingLongTextRow;
     private SalvageColumn? editingLongTextCol;
+    private bool isQuickEntryModalOpen = false;
+    private int quickEntryRowId;
+    private string quickEntryInput = "";
+    private QuickEntry? quickEntry;
+    private string? errors;
 
 
 
@@ -464,7 +526,7 @@
             dotNetHelper = DotNetObjectReference.Create(this);
             }
         */
-        await JS.InvokeVoidAsync("registerClickOutside", dotNetHelper, $"menu-{columnId}");
+                                                                                                                                                                                        await JS.InvokeVoidAsync("registerClickOutside", dotNetHelper, $"menu-{columnId}");
 
         StateHasChanged();
     }
@@ -480,7 +542,7 @@
             dotNetHelper = DotNetObjectReference.Create(this);
             }
         */
-        await JS.InvokeVoidAsync("registerClickOutsideRow", dotNetHelper, $"row-menu-{rowId}");
+                                                                                                                                                                                        await JS.InvokeVoidAsync("registerClickOutsideRow", dotNetHelper, $"row-menu-{rowId}");
 
         StateHasChanged();
     }
@@ -619,6 +681,108 @@
             await LoadBoardAsync(); // then load cells and show new saved value
         }
         CloseLongTextModal(); // close modal after saving and go back to main view
+    }
+
+    private void OpenQuickEntryModal(int rowId)
+    {
+        isQuickEntryModalOpen = true;
+        quickEntryRowId = rowId; // what row are we in
+        quickEntryInput = "";
+        quickEntry = null;
+    }
+
+    private void CloseQuickEntryModal()
+    {
+        isQuickEntryModalOpen = false; //close modal    
+        quickEntryInput = ""; // clear this
+        quickEntry = null; //clear this
+        
+    }
+
+    private void ParseQuickEntry()
+    {
+        quickEntry = new QuickEntry(); // create new object
+        var lines = quickEntryInput.Split('\n').Select(line => line.Trim()).Where(line => !string.IsNullOrWhiteSpace(line));
+
+        foreach (var line in lines) // handle each lin
+        {
+            if (line.StartsWith("Date:", StringComparison.OrdinalIgnoreCase))
+                quickEntry.Date = line.Substring("Date:".Length).Trim();
+            if (line.StartsWith("Dispatch Number:", StringComparison.OrdinalIgnoreCase))
+                quickEntry.DispatchNumber = line.Substring("Dispatch Number:".Length).Trim();
+            if (line.StartsWith("Incident number:", StringComparison.OrdinalIgnoreCase))
+                quickEntry.IncidentNumber = line.Substring("Incident number:".Length).Trim();
+            if (line.StartsWith("Make:", StringComparison.OrdinalIgnoreCase))
+                quickEntry.Make = line.Substring("Make:".Length).Trim();
+            if (line.StartsWith("Model:", StringComparison.OrdinalIgnoreCase))
+                quickEntry.Model = line.Substring("Model:".Length).Trim();
+            if (line.StartsWith("Length:", StringComparison.OrdinalIgnoreCase))
+                quickEntry.Length = line.Substring("Length:".Length).Trim();
+            if (line.StartsWith("Customer number:", StringComparison.OrdinalIgnoreCase))
+                quickEntry.CustomerNumber = line.Substring("Customer number:".Length).Trim();
+            if (line.StartsWith("Customer Name:", StringComparison.OrdinalIgnoreCase))
+                quickEntry.CustomerName = line.Substring("Customer Name:".Length).Trim();
+            if (line.StartsWith("Best number to contact:", StringComparison.OrdinalIgnoreCase))
+                quickEntry.PhoneNumber = line.Substring("Best number to contact:".Length).Trim();
+        }
+    }
+
+    private async Task ApplyQuickEntryToRow()
+    {
+        var row = Rows.FirstOrDefault(r => r.Id == quickEntryRowId);
+        if (row != null && quickEntry != null)
+        {
+            foreach (var col in Columns)
+            {
+                try
+                {
+                    if (col.Label.Contains("Date", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(quickEntry.Date))
+                    {
+                        await TableService.UpdateCellValueAsync(row.Id, col.Id, quickEntry.Date);
+                    }
+                    if (col.Label.Contains("G#", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(quickEntry.DispatchNumber))
+                    {
+                        await TableService.UpdateCellValueAsync(row.Id, col.Id, quickEntry.DispatchNumber);
+                    }
+                    if (col.Label.Contains("Claim #", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(quickEntry.IncidentNumber))
+                    {
+                        await TableService.UpdateCellValueAsync(row.Id, col.Id, quickEntry.IncidentNumber);
+                    }
+                    if (col.Label.Contains("Vessel Make", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(quickEntry.Make))
+                    {
+                        await TableService.UpdateCellValueAsync(row.Id, col.Id, quickEntry.Make);
+                    }
+                    if (col.Label.Contains("Model", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(quickEntry.Model))
+                    {
+                        await TableService.UpdateCellValueAsync(row.Id, col.Id, quickEntry.Model);
+                    }
+                    if (col.Label.Contains("Vessel Length", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(quickEntry.Length))
+                    {
+                        await TableService.UpdateCellValueAsync(row.Id, col.Id, quickEntry.Length);
+                    }
+                    if (col.Label.Contains("Member #", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(quickEntry.CustomerNumber))
+                    {
+                        await TableService.UpdateCellValueAsync(row.Id, col.Id, quickEntry.CustomerNumber);
+                    }
+                    if (col.Label.Contains("Name", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(quickEntry.CustomerName))
+                    {
+                        await TableService.UpdateCellValueAsync(row.Id, col.Id, quickEntry.CustomerName);
+                    }
+                    if (col.Label.Contains("Phone Number", StringComparison.OrdinalIgnoreCase) && !string.IsNullOrWhiteSpace(quickEntry.PhoneNumber))
+                    {
+                        await TableService.UpdateCellValueAsync(row.Id, col.Id, quickEntry.PhoneNumber);
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+                //when done then...
+                await LoadBoardAsync();
+            }
+            // then..
+            CloseQuickEntryModal();
+        }
     }
 
     //=============Cell Rendering=============
