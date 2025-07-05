@@ -63,8 +63,28 @@
         <span class="dashboard-title">Dashboard Overview</span>
         <div class="dashboard-filters">
             <select class="dashboard-select" @bind="selectedYear">
-
+                @foreach (var year in AvailableYears)
+                {
+                    <option value="@year">@year</option>
+                }
             </select>
+            <select class="dashboard-select" @bind="selectedMonth">
+                <option value="">All Months</option>
+                @for (int m = 1; m <= 12; m++)
+                {
+                    <option value="@m">@MonthName(m)</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="dashboard-stats">
+        <div class="dashboard-card">
+            <div class="dashboard-card-title">Dispatches</div>
+            <div class="dashboard-card-value">@DispatchCount</div>
+        </div>
+        <div class="dashboard-card">
+            <div class="dashboard-card-title">Income</div>
+            <div class="dashboard-card-value">$@IncomeTotal.ToString("N2")</div>
         </div>
     </div>
 </div>
@@ -497,6 +517,41 @@
     private QuickEntry? quickEntry;
     private string? errors;
 
+    /*For Stats*/
+    private int _selectedYear = DateTime.Now.Year;
+    private int? _selectedMonth = null;
+    private List<int> AvailableYears = new();
+    private int DispatchCount;
+    private decimal IncomeTotal;
+    private string MonthName(int month) => new DateTime(2000, month, 1).ToString("MMMM");
+
+
+    /* Setters with logic for stats*/
+    private int selectedYear
+    {
+        get => _selectedYear;
+        set
+        {
+            if (_selectedYear != value)
+            {
+                _selectedYear = value;
+                _ = LoadDashboardStats();
+            }
+        }
+    }
+
+    private int? selectedMonth
+{
+    get => _selectedMonth;
+    set
+    {
+        if (_selectedMonth != value)
+        {
+            _selectedMonth = value;
+            _ = LoadDashboardStats();
+        }
+    }
+}
 
 
 
@@ -506,12 +561,52 @@
     {
         await LoadBoardAsync();
         dotNetHelper = DotNetObjectReference.Create(this);
+
+        /*for Stats*/
+        //populate yrears 
+        int minYear = 2020;
+        int maxYear = DateTime.Now.Year;
+        AvailableYears = Enumerable.Range(minYear, maxYear - minYear + 1).ToList();
+        selectedYear = maxYear;
+        selectedMonth = null;
+        await LoadDashboardStats();
     }
 
     private async Task LoadBoardAsync()
     {
         Columns = await TableService.GetColumnAsync();
         Rows = await TableService.GetRowsWithCellAsync();
+    }
+
+    private async Task LoadDashboardStats()
+    {
+        var rows = await TableService.GetRowsWithCellAsync();
+
+        var filtered = rows.Where(r =>
+        {
+            var dateCell = r.Cells.FirstOrDefault(c => c.Column.Label.Contains("Date", StringComparison.OrdinalIgnoreCase)); // get the cell with the date
+            if (dateCell == null || !DateTime.TryParse(dateCell.Value, out var date))
+                return false;
+            if (date.Year != selectedYear) return false;
+            if (selectedMonth.HasValue && date.Month != selectedMonth.Value) return false;
+            return true;
+        }).ToList();
+
+        DispatchCount = filtered.Count;
+
+        IncomeTotal = filtered
+            .Select(r =>
+            {
+                var incomeCell = r.Cells.FirstOrDefault(c => c.Column.Label.Contains("Invoice", StringComparison.OrdinalIgnoreCase));
+                if (incomeCell != null && decimal.TryParse(incomeCell.Value, out var val))
+                    return val;
+                return 0m;
+            }).Sum();
+    }
+
+    private async Task OnFilterChanged(ChangeEventArgs e)
+    {
+        await LoadDashboardStats();
     }
 
     //========Menu JS Interop ============

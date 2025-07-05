@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TowBoatSalvageWebApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b0224ef849293b8c7c1719a0418ca4b9b3912d91")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fbdebbedbbc398a29d42424add8545fc6ddf6e5b")]
 [assembly: System.Reflection.AssemblyProductAttribute("TowBoatSalvageWebApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TowBoatSalvageWebApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
