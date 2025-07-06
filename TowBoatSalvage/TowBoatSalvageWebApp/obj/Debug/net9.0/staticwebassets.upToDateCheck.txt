@@ -127,7 +127,7 @@ wwwroot\salvage_uploads\f6df8366-9f9c-4d6c-8221-a4b4171ce170_AntiAging.png
 wwwroot\salvage_uploads\f8dea182-3c8d-4319-afba-0a491ea6d4a9_AntiAging.png
 wwwroot\salvage_uploads\ff5bcf57-8366-49bb-9953-369c165a8c83_boatSinking.jpg
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
-C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\wwwroot\js\scripts.js
+C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\wwwroot\app.css
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\wwwroot\js\tooltip.js
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
@@ -172,4 +172,4 @@ C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalv
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
-C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\wwwroot\app.css
+C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\wwwroot\js\scripts.js

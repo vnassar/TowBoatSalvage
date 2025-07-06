@@ -1,4 +1,4 @@
-﻿@page "/salvage-board"
+﻿@page "/test"
 @using TowBoatSalvageWebApp.Data
 @using TowBoatSalvageWebApp.Models
 @using TowBoatSalvageWebApp.Services
@@ -105,268 +105,47 @@
 
 <!-- Dynamic Table -->
 <div class="salvage-board">
-    <h1>Hello World!</h1>
+
     <!-- Wrap table in a scrollable container, this before was shrinking and getting to tight/bad UI-->
     <div class="table-scroll-container">
         <div class="table-container">
         <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th class="row-menu-cell sticky-col first-col">
-                            <!--leaving blank for action column-->
-                            <p> </p>
-                        </th>
-                        @{
-                                int colIndex = 0;
-                            }
-                        @foreach (var col in Columns)
+                        <!-- 1st sticky column (row menu cell) -->
+                        <th class="row-menu-cell sticky-col-1"></th>
+                        <!-- 2nd sticky column (first data column) -->
+                        @if (Columns.Count > 0)
                         {
-                            if (col.Label == "G#")
-                            {
-                                <th class="row-menu-cell sticky-col second-col">
-                                    <div class="d-flex justify-content-between align-items-center w-100">
-                                        <div>
-                                            
-                                            @col.Label
-                                            <span class="column-type-label">(@col.Type)
-                                            </span>
-                                        </div>
-                                        <!--Three-dot icon -->
-                                        <button class="menu-btn" @onclick="e => ShowColumnMenu(col.Id, e)" @ref="@columnMenuButtonRefs[col.Id]" @onclick:stopPropagation>
-                                            &#8942;
-                                        </button>
-                                    </div>
-                                </th>
-                            }
-                            else
-                            {
-                                <th class="position-relative">
-                                    <div class="d-flex justify-content-between align-items-center w-100">
-                                        <div>
-                                            @col.Label
-                                            <span class="column-type-label">(@col.Type)
-                                            </span>
-                                        </div>
-                                        <!--Three-dot icon -->
-                                        <button class="menu-btn" @onclick="e => ShowColumnMenu(col.Id, e)" @ref="@columnMenuButtonRefs[col.Id]" @onclick:stopPropagation>
-                                            &#8942;
-                                        </button>
-                                    </div>
-                                </th>
-                            }
-                            colIndex++; //adding to colIndex to keep track of columns and keep first col sticky
-                            <!-- Column menu -->
-                            @*
-                                @if (activeMenuColumnId == col.Id)
-                            {
-                                <dialog id="menu-@col.Id" class="column-menu">
-                                    <button class="dropdown-item" @onclick="() => StartRenameColumn(col.Id)">Rename</button>
-                                    <button class="dropdown-item text-danger" @onclick="() => DeleteColumn(col.Id)">Delete</button>
-                                </dialog>
-                            }
-                            *@
-                            
+                            <th class="sticky-col-2">@Columns[0].Label</th>
+                        }
+                        @for (int i = 1; i < Columns.Count; i++)
+                        {
+                            <th class="position-relative">@Columns[i].Label</th>
                         }
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var row in Rows)
                     {
-                        <tr class="data-row"
-                            @onmouseover="@(() => hoverRow = row.Id)"
-                            @onmouseout="@(() => hoverRow = null)">
-
-                            <!-- Three-dot menu cell -->
-                            <td class="row-menu-cell sticky-col first-col">
-                                <button class="menu-btn"
-                                        style="visibility:@((hoverRow == row.Id) ? "visible" : "hidden")"
-                                        @onclick="(e => ShowRowMenu(row.Id, e))" @onclick:stopPropagation>
-                                    &#8942;
-                                </button>
-                            </td>
-                            <!--Row Menu-->
-                                @if (activeRowMenuId == row.Id)
-                                {
-                                    @*row-menu-dropdown*@
-                                    <div id="row-menu-@row.Id" class="row-menu-dropdown">
-                                        <button class="dropdown-item" @onclick="() => OpenQuickEntryModal(row.Id)">Quick Entry</button> @*Quick entry => parser here*@
-                                        <button class="dropdown-item text-danger" @onclick="() => DeleteRow(row.Id)">Delete Row</button>
-                                    </div>
-                                }
-                            
-                            @{
-                                int rowIndex = 0;
-                            }
-                            @foreach (var col in Columns)
+                        <tr>
+                            <!-- 1st sticky column (row menu cell) -->
+                            <td class="row-menu-cell sticky-col-1"> ... </td>
+                            <!-- 2nd sticky column (first data column) -->
+                            @if (Columns.Count > 0)
                             {
-                                /*@onmouseover="() => {hoverRow = row.Id; currentHoverRow = row; currentUploadColumn = col;}" @onmouseout="() => hoverRow = null */
-                                /*@onmouseleave="() => hoverRow = null"  // remove from under onmousenter because it's breaking the file upload */
-                                @if (col.Label == "G#")
-                                {
-                                    <td class="file-cell sticky-col second-col">
-                                        <span class="input-tooltip-container">
-                                            @RenderCell(row, col)
-                                            @{
-                                                var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
-                                                var value = cell?.Value ?? "";
-                                            }
-                                            @if (!string.IsNullOrWhiteSpace(value) && value.Length > 15)
-                                            {
-                                                <span class="input-tooltip">
-                                                    <span>
-                                                        @value
-                                                    </span>
-                                                </span>
-                                            }
-                                        </span>
-                                    </td>
-                                }
-                                else if (col.Type == "FileUpload")
-                                {
-                                    <td class="file-cell">
-                                    <span class="file-cell-images">
-                                            @* show up to 3 thumbnails *@
-                                            @{
-                                            var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
-                                            var files = cell?.Files?.ToList() ?? new List<SalvageFile>();
-                                            }
-
-                                            @if (files.Count > 0)
-                                            {
-                                                var toShow = files.Count > 3 ? files.Take(3) : files;
-                                                foreach (var file in toShow)
-                                                {
-                                                    <span class="thumb-container" style="position:relative; display:inline-block;">
-                                                        <img src="@($"/salvage_uploads/{file.FileName}")"
-                                                             @onclick="() => OpenGallery(files, file.FileName)"
-                                                             class="tiny-thumb" />
-                                                    </span>
-                                                }
-                                                @*If more than3, show +N badge*@
-                                                if (files.Count > 3)
-                                                {
-                                                    <span class="more-badge" @onclick="() => OpenGallery(files, files.First().FileName)">
-                                                        +@(files.Count - 3)
-                                                    </span>
-                                                }
-                                            }
-                                            @* always show the upload Upload Button on hover *@
-
-                                            <label class="upload-btn" @onclick:stopPropagation>
-                                                +
-                                                <InputFile OnChange="async e => UploadMultipleFiles(e, row.Id, col.Id)" multiple style="display:none"
-                                                           @onclick:stopPropagation />
-                                            </label>
-                                    </span>
-                                </td>
-                                }
-                                else if (col.Type == "DocumentUpload")
-                                {
-                                    <td class="file-cell">
-                                        <span class="file-cell-images">
-                                            @{
-                                                var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
-                                                var files = cell?.Files?.ToList() ?? new List<SalvageFile>();
-                                            }
-                                            @foreach (var file in files)
-                                            {
-                                                // for view in browser
-                                                // var baseUrl = "https://towboat.vnassar.com";
-                                                // var baseUrl = "https://localhost:5010";
-                                                var baseUrl = "https://localhost:5010";
-                                                var fileUrl = $"{baseUrl}/salvage_uploads/{file.FileName}";
-                                                var officeViewerUrl = $"https://view.officeapps.live.com/op/view.aspx?src={Uri.EscapeDataString(fileUrl)}";
-
-                                                <span class="doc-link">
-                                                    @if (file.FileType == "application/pdf")
-                                                    {
-                                                        // direct browser link
-                                                        <a href="@($"/salvage_uploads/{file.FileName}")" target="_blank">
-                                                            <i class="fade fa-file-pdf-o" style="color:#d32f2f"></i>
-                                                            @file.OriginalName
-                                                        </a>
-                                                    }
-                                                    else if (file.FileType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
-                                                    file.FileType == "application/msword" ||
-                                                    file.FileType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
-                                                    file.FileType == "application/vnd.openxmlformats-officedocument.presentationml.presentation" ||
-                                                    file.FileType == "application/vnd.ms-excel")
-                                                    {
-                                                        // Word, Excel, PowerPoint: Office Online Viewer
-
-                                                        <a href="@officeViewerUrl" target="_blank" rel="noopener">
-                                                            <i class="fa fa-file-word-o" style="color:#1976d2"></i>
-                                                            @file.OriginalName
-                                                        </a>
-                                                    }
-                                                    else
-                                                    {
-                                                        // Other file types: direct link
-                                                        <a href="@($"/salvage_uploads/{file.FileName}")" target="_blank">
-                                                            <i class="fa fa-file-o"></i>
-                                                            @file.OriginalName
-                                                        </a>
-                                                    }
-                                                </span>
-
-                                            }
-                                            <label class="upload-btn" @onclick:stopPropagation>
-                                                +
-                                                <InputFile OnChange="e => UploadDocumentFiles(e, row.Id, col.Id)" multiple style="display:none" @onclick:stopPropagation />
-                                            </label>
-                                        </span>
-                                    </td>
-
-
-                                }
-                            else if (col.Type == "LongText")
-                            {
-                                var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id); //figure out where we are 
-                                var value = cell?.Value ?? ""; // once we know which cell we are, whats our value? if null make it empty
-
-                                <td class="file-cell">
-                                    <span class="input-tooltip-container">
-                                        <input class="form-control"
-                                            readonly
-                                            value="@value"
-                                            style="cursor:pointer"
-                                            @onclick="() => OpenLongTextModal(row, col)" />
-                                        @if (!string.IsNullOrWhiteSpace(value) && value.Length > 15)
-                                        {
-                                            <span class="input-tooltip">
-                                                <div class="tooltip-content">
-                                                    @value
-                                                </div>
-                                            </span>
-                                        }
-                                    </span>
+                                <td class="sticky-col-2">
+                                    @* RenderCell for Columns[0] *@
+                                    @RenderCell(row, Columns[0])
+                                    @RenderCell(row, Columns[1])
                                 </td>
                             }
-                            else
-                                {
-                                    <td class="file-cell">
-                                        <span class="input-tooltip-container">
-                                            @RenderCell(row, col)
-                                            @{
-                                                var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
-                                                var value = cell?.Value ?? "";
-                                            }
-                                            @if (!string.IsNullOrWhiteSpace(value) && value.Length > 15)
-                                            {
-                                                <span class="input-tooltip">
-                                                    <span>
-                                                        @value
-                                                    </span>
-                                                </span>
-                                            }
-                                        </span>
-                                    </td>
-                                }
-                                rowIndex++; // increment our index to keep track of rows and apply to our first row/column
-                                Console.WriteLine($"RowIndex = {rowIndex}");
+                            @for (int i = 2; i < Columns.Count; i++)
+                            {
+                                <td>
+                                    @RenderCell(row, Columns[i])
+                                </td>
                             }
-
-                            
                         </tr>
                     }
                 </tbody>
@@ -525,22 +304,14 @@
             </div>
         </div>
     }
-
-
-@if (activeMenuColumnId != null && portalMenuPosition != null)
-{
-    var col = Columns.FirstOrDefault(c => c.Id == activeMenuColumnId);
-    if (col != null)
-    {
-        <div id="menu-@col.Id" class="column-menu"
-             style="position:fixed; left:@portalMenuPosition.LeftPx; top:@portalMenuPosition.TopPx; z-index:99999;">
-            <button class="dropdown-item" @onclick="() => StartRenameColumn(col.Id)">Rename</button>
-            <button class="dropdown-item text-danger" @onclick="() => DeleteColumn(col.Id)">Delete</button>
-        </div>
-    }
-}
 </div>
 
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 
 
 
@@ -551,11 +322,12 @@
     private bool isAddColumnModalOpen = false;
     private string newColumnLabel = string.Empty;
     private string newColumnType = "Text";
+    private int? activeMenuColumnId = null;
     private int? activeRowMenuId = null;
     private bool isRenaming = false;
     private string renameText = "";
     private int? editingColumndId = null;
-    private DotNetObjectReference<SalvageBoard>? dotNetHelper;
+    private DotNetObjectReference<Testing>? dotNetHelper;
     private bool isGalleryOpen = false;
     private string selectedImage = string.Empty;
     private List<SalvageFile> currentGallery = new();
@@ -582,38 +354,7 @@
     private int DispatchCount;
     private decimal IncomeTotal;
     private string MonthName(int month) => new DateTime(2000, month, 1).ToString("MMMM");
-    /* Portal menu, column menu*/
-    private int? activeMenuColumnId = null;
-    private PortalMenuPosition? portalMenuPosition = null;
-    private DotNetObjectReference<SalvageBoard>? _menuRef;
 
-    public class PortalMenuPosition
-    {
-        public string LeftPx { get; set; } = "0px";
-        public string TopPx { get; set; } = "0px";
-
-    }
-
-    private Dictionary<int, ElementReference> columnMenuButtonRefs = new();
-
-    private ElementReference GetColumnMenuButtonRef(int colId)
-    {
-        if (!columnMenuButtonRefs.ContainsKey(colId))
-            columnMenuButtonRefs[colId] = default;
-        return columnMenuButtonRefs[colId];
-
-    }
-
-    // HELPER FUNCTION
-    public class DomRect
-    {
-        public double Left { get; set; }
-        public double Top { get; set; }
-        public double Bottom { get; set; }
-        public double Right { get; set; }
-        public double Width { get; set; }
-        public double Height { get; set; }
-    }
 
     /* Setters with logic for stats*/
     private int selectedYear
@@ -630,17 +371,17 @@
     }
 
     private int? selectedMonth
+{
+    get => _selectedMonth;
+    set
     {
-        get => _selectedMonth;
-        set
+        if (_selectedMonth != value)
         {
-            if (_selectedMonth != value)
-            {
-                _selectedMonth = value;
-                _ = LoadDashboardStats();
-            }
+            _selectedMonth = value;
+            _ = LoadDashboardStats();
         }
     }
+}
 
 
 
@@ -659,15 +400,6 @@
         selectedYear = maxYear;
         selectedMonth = null;
         await LoadDashboardStats();
-
-        //initialize dictionary for columns
-        foreach (var col in Columns)
-        {
-            if (!columnMenuButtonRefs.ContainsKey(col.Id))
-            {
-                columnMenuButtonRefs[col.Id] = default;
-            }
-        }
     }
 
     private async Task LoadBoardAsync()
@@ -708,62 +440,42 @@
     }
 
     //========Menu JS Interop ============
-    private async Task ShowColumnMenu(int colId, MouseEventArgs e)
+    private async Task ShowColumnMenu(int columnId)
     {
-        activeMenuColumnId = colId;
+        activeMenuColumnId = columnId;
 
-        // using js to get screen position of the menu button
-        var elemRef = GetColumnMenuButtonRef(colId);
-        var rect = await JS.InvokeAsync<DomRect>("getBoundingClientRect", elemRef);
-        portalMenuPosition = new PortalMenuPosition
+        /*
+        * having error with this during file upload
+        if (dotNetHelper is null)
         {
-            LeftPx = $"{rect.Left}px",
-            TopPx = $"{rect.Bottom + 4}px"
-        };
-        
-        await JS.InvokeVoidAsync("registerClickOutside", dotNetHelper, $"menu-{colId}");
-
-        // Register JS listener
-        _menuRef = DotNetObjectReference.Create(this);
-        await JS.InvokeVoidAsync("registerMenuReposition", _menuRef, elemRef);
+            dotNetHelper = DotNetObjectReference.Create(this);
+            }
+        */
+                                                                                                                                                                                        await JS.InvokeVoidAsync("registerClickOutside", dotNetHelper, $"menu-{columnId}");
 
         StateHasChanged();
     }
-
-    [JSInvokable]
-    public void UpdateMenuPosition(PositionUpdate pos)
-    {
-        if (portalMenuPosition != null)
-        {
-            portalMenuPosition.LeftPx = $"{pos.left}px";
-            portalMenuPosition.TopPx = $"{pos.top + 6}px";
-            InvokeAsync(StateHasChanged);
-        }
-    }
-
-    public class PositionUpdate
-    {
-        public double left { get; set; }
-        public double top { get; set; }
-    }
-
 
     private async Task ShowRowMenu(int rowId, MouseEventArgs e)
     {
         activeRowMenuId = rowId;
 
-        await JS.InvokeVoidAsync("registerClickOutsideRow", dotNetHelper, $"row-menu-{rowId}");
+        /*
+        * having error with this during file upload
+        if (dotNetHelper is null)
+        {
+            dotNetHelper = DotNetObjectReference.Create(this);
+            }
+        */
+                                                                                                                                                                                        await JS.InvokeVoidAsync("registerClickOutsideRow", dotNetHelper, $"row-menu-{rowId}");
 
         StateHasChanged();
     }
 
     [JSInvokable]
-    public async Task CloseColumnMenu()
+    public void CloseColumnMenu()
     {
         activeMenuColumnId = null;
-        await JS.InvokeVoidAsync("unregisterMenuReposition");
-        _menuRef?.Dispose();
-
         StateHasChanged();
     }
 
@@ -1154,24 +866,6 @@
             selectedImage = currentGallery.First().FileName;
         }
     }
-
-
-    /**************TESTING*************/
-    public class DemoRow
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = "";
-        public List<string> Values { get; set; } = new();
-    }
-
-    public List<DemoRow> Data = Enumerable.Range(1, 15)
-        .Select(i => new DemoRow
-        {
-            Id = i,
-            Name = $"Test {i}",
-            Values = Enumerable.Range(1, 12).Select(n => $"Val {i}-{n}").ToList()
-        })
-        .ToList();
 
     
 

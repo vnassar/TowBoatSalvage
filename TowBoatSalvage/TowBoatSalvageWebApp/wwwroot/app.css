@@ -174,12 +174,11 @@ h1:focus {
     /* Column menu */
     .salvage-board .column-menu {
         position: absolute;
-        right: 0;
         top: 100%;
         background: white;
         border-radius: 4px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        z-index: 9;
+        z-index: 10050;
         min-width: 150px;
         padding: 8px 0;
     }
@@ -200,6 +199,17 @@ h1:focus {
                 background-color: #f5f6fa;
             }
 
+    /* NEW COLUMN MENU PORTAL OLD ONE DIDNT WORK AFTER ADDING STICKY COLUMN*/
+.column-menu-portal {
+    min-width: 160px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.16);
+    padding: 8px 0;
+    position: fixed;
+    z-index: 99999;
+}
+
     /* Row menu styling and action column*/
     .salvage-board .row-menu-cell {
         width: 40px;
@@ -214,7 +224,7 @@ h1:focus {
         background: white;
         border-radius: 4px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        z-index: 9;
+        z-index: 10050;
         min-width: 150px;
         padding: 8px 0;
     }
@@ -237,12 +247,12 @@ h1:focus {
 
     /* File upload styling */
     .salvage-board .file-cell {
-        position: relative;
+        /*    position: relative;           */
     }
 
     /* trying to fix cell tooltip scroll issue here*/
     .salvage-board .file-cell, .salvage-board .table td {
-        position: relative;
+        /*    position: relative;           */
         overflow: visible !important;
     }
     /*****/
@@ -703,3 +713,140 @@ tbody, thead, tr {
     font-weight: 700;
     color: #23272e;
 }
+
+/* FOR SCROLLABLE FIXED COLUMN*/
+.table-scroll-container {
+    width: 100%;
+    overflow-x: auto;
+    max-width: 1100px; /* max widgth otherwise the table is super wide*/
+}
+
+.sticky-col {
+    position: sticky;
+    left: 0;
+    z-index: 3; /* keeps the column above others while scrolling*/
+    background: #fff; /* match table bg?  */
+    box-shadow: 2px 0 5px -2px #ccc; /* sublt shadow to separate sticky column*/
+}
+
+.second-sticky-col {
+    position: sticky;
+    left: 100px; /*adjust to match .row-menu-cell width*/
+    z-index: 3;
+    background: #f6f9ff;
+    box-shadow: 2px 0 6px -2px #ccc;
+}
+
+.stick-col-1 {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+}
+
+.stick-col-2 {
+    position: sticky;
+    left: 40px;
+    z-index: 2;
+}
+
+.table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #f9f9f9;
+}
+
+
+
+/************** TEST *******************/
+.sticky-table-container {
+    max-width: 900px;
+    margin: 30px 0;
+    overflow-x: auto;
+    border-radius: 10px;
+    box-shadow: 0 2px 14px rgba(110, 125, 180, 0.09);
+    background: #fafbfe;
+    padding: 8px;
+}
+
+.sticky-table {
+    width: 1400px;
+    min-width: 1000px;
+    border-collapse: separate;
+    background: #fff;
+}
+
+    .sticky-table th, .sticky-table td {
+        padding: 10px 16px;
+        border: 1px solid #e5e9f3;
+        background: #fff;
+        white-space: nowrap;
+    }
+
+.sticky-col {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    background: #f6f9ff;
+    box-shadow: 2px 0 8px -4px #cfd8e7;
+}
+
+.first-col {
+    left: 0;
+    z-index: 3;
+    background: #eaf2fc;
+}
+
+.second-col {
+    left: 40px; /* Adjust based on your first col's width */
+    z-index: 4;
+    background: #f6f9ff;
+}
+
+/* Header styles for stickiness */
+.sticky-table th.sticky-col {
+    z-index: 5;
+}
+
+.sticky-table th.first-col {
+    z-index: 6;
+}
+
+.sticky-table th.second-col {
+    z-index: 5;
+}
+
+/* Optional: highlight sticky col in row hover */
+.sticky-table tr:hover td.sticky-col {
+    background: #e2edff;
+}
+
+
+/* OVERRIDES FOR STICKY COL*/
+.salvage-board .row-menu-cell,
+.salvage-board .row-menu-cell.sticky-col,
+.salvage-board .second-sticky-col {
+    position: sticky !important;
+}
+
+    .salvage-board .row-menu-cell,
+    .salvage-board .row-menu-cell.sticky-col {
+        /*   left: 0 !important;   */
+        z-index: 3 !important;
+        background: #fff;
+    }
+
+.salvage-board .second-sticky-col {
+    left: 40px !important; /* Must match your row-menu-cell width */
+    z-index: 2 !important;
+    background: #f6f9ff;
+}
+
+/* Remove conflicting relative positioning from all td/th */
+
+
+/***************************/
+
+/*******************/
+
+/********************/

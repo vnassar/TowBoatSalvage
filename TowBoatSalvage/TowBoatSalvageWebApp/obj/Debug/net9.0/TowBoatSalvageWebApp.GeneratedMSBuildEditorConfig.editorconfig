@@ -204,6 +204,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xTYWx2YWdlQm9hcmQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/vnass/Desktop/Projects/GitHub/TowBoatSalvage/TowBoatSalvage/TowBoatSalvageWebApp/Components/Pages/StickyColumnsDemoTest.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xTdGlja3lDb2x1bW5zRGVtb1Rlc3QucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/vnass/Desktop/Projects/GitHub/TowBoatSalvage/TowBoatSalvage/TowBoatSalvageWebApp/Components/Pages/Testing.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xUZXN0aW5nLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/vnass/Desktop/Projects/GitHub/TowBoatSalvage/TowBoatSalvage/TowBoatSalvageWebApp/Components/Pages/Tooltip.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xUb29sdGlwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 

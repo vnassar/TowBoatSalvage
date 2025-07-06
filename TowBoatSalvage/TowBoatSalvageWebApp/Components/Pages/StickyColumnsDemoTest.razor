@@ -1,0 +1,49 @@
+﻿@page "/test123"
+
+<h3>Sticky First Two Columns Demo</h3>
+
+<div class="sticky-table-container">
+    <table class="sticky-table">
+        <thead>
+            <tr>
+                <th class="sticky-col first-col">ID</th>
+                <th class="sticky-col second-col">Name</th>
+                @for (int i = 1; i <= 12; i++)
+                {
+                    <th>Col @i</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Data)
+            {
+                <tr>
+                    <td class="sticky-col first-col">@item.Id</td>
+                    <td class="sticky-col second-col">@item.Name</td>
+                    @foreach (var val in item.Values)
+                    {
+                        <td>@val</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    public class DemoRow
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = "";
+        public List<string> Values { get; set; } = new();
+    }
+
+    public List<DemoRow> Data = Enumerable.Range(1, 15)
+        .Select(i => new DemoRow
+        {
+            Id = i,
+            Name = $"Test {i}",
+            Values = Enumerable.Range(1, 12).Select(n => $"Val {i}-{n}").ToList()
+        })
+        .ToList();
+}
