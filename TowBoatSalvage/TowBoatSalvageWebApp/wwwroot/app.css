@@ -842,11 +842,8 @@ tbody, thead, tr {
     background: #f6f9ff;
 }
 
-/* Remove conflicting relative positioning from all td/th */
-
-
-/***************************/
-
-/*******************/
-
-/********************/
+/* TABLE MENU - WHAT IS ABOVE THE TABLE*/
+.table-menu {
+    display: flex;
+    gap: 20px;
+}

@@ -60,7 +60,7 @@
 @*Dashboard****************@
 <div class="dashboard-section">
     <div class="dashboard-header">
-        <span class="dashboard-title">Dashboard Overview</span>
+        <span class="dashboard-title">TowBoatU.S Greater Tampa Bay</span>
         <div class="dashboard-filters">
             <select class="dashboard-select" @bind="selectedYear">
                 @foreach (var year in AvailableYears)
@@ -83,33 +83,32 @@
             <div class="dashboard-card-value">@DispatchCount</div>
         </div>
         <div class="dashboard-card">
-            <div class="dashboard-card-title">Income</div>
+            <div class="dashboard-card-title">Salvage Revenue</div>
             <div class="dashboard-card-value">$@IncomeTotal.ToString("N2")</div>
         </div>
     </div>
 </div>
 
-<h3>Salvage Dispatch Table</h3>
-<h3>Developer Mode:</h3>
-<p>hoverRow: @hoverRow</p>
-<p>@errors</p>
-<br />
 @* DEBUGGING HERE*@
 
 
 
 
 <!-- Add Column Button -->
-<button class="btn btn-primary mb-3" @onclick="ShowAddColumnModal">+ Add Column</button>
-<br />
 
-<!-- Dynamic Table -->
+
+@*ACTIVE ROWS TABLE*@
+
 <div class="salvage-board">
-    <h1>Hello World!</h1>
+    <div class="table-menu">
+        <h1>Active</h1>
+        <button class="btn btn-primary mb-3" @onclick="ShowAddColumnModal">+ Add Column</button>
+    </div>
     <!-- Wrap table in a scrollable container, this before was shrinking and getting to tight/bad UI-->
     <div class="table-scroll-container">
+        @*ACTIVE ROW TABLE*@
         <div class="table-container">
-        <table class="table table-bordered">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th class="row-menu-cell sticky-col first-col">
@@ -170,7 +169,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var row in Rows)
+                    @foreach (var row in ActiveRows)
                     {
                         <tr class="data-row"
                             @onmouseover="@(() => hoverRow = row.Id)"
@@ -238,8 +237,8 @@
                                                 {
                                                     <span class="thumb-container" style="position:relative; display:inline-block;">
                                                         <img src="@($"/salvage_uploads/{file.FileName}")"
-                                                             @onclick="() => OpenGallery(files, file.FileName)"
-                                                             class="tiny-thumb" />
+                                                                @onclick="() => OpenGallery(files, file.FileName)"
+                                                                class="tiny-thumb" />
                                                     </span>
                                                 }
                                                 @*If more than3, show +N badge*@
@@ -255,7 +254,7 @@
                                             <label class="upload-btn" @onclick:stopPropagation>
                                                 +
                                                 <InputFile OnChange="async e => UploadMultipleFiles(e, row.Id, col.Id)" multiple style="display:none"
-                                                           @onclick:stopPropagation />
+                                                            @onclick:stopPropagation />
                                             </label>
                                     </span>
                                 </td>
@@ -370,8 +369,8 @@
                         </tr>
                     }
                 </tbody>
-        </table>
-    </div>
+            </table>
+        </div>
     </div>
 
 <!-- Add Row Button -->
@@ -498,11 +497,450 @@
                     </div>
                     <div class="longtext-modal-body">
                         <textarea class="form-control"
-                            style="min-height 400px; width:100%;font-size:1.05rem"
+                            style="min-height: 225px; width:100%;font-size:1.05rem"
                             @bind="quickEntryInput">
                         </textarea>
                         <div class="mt-3">
-                            <button class="butn btn-secondary" @onclick="ParseQuickEntry">Parse</button>
+                            <button class="btn btn-secondary" @onclick="ParseQuickEntry">Parse</button>
+                        </div>
+                        @if (quickEntry != null)
+                        {
+                            <div class="mt-4 p-3 border rounded" style="background:#f6f7fb">
+                                <b>Preview Parsed Fields:</b>
+                                <div>Date: <span>@quickEntry.Date</span></div>
+                                <div>Dispatch #: <span>@quickEntry.DispatchNumber</span></div>
+                                <div>Claim #: <span>@quickEntry.IncidentNumber</span></div>
+                                <div>Make: <span>@quickEntry.Make</span></div>
+                                <div>Model: <span>@quickEntry.Model</span></div>
+                                <div>Length: <span>@quickEntry.Length</span></div>
+                                <div>Member: <span>@quickEntry.CustomerNumber</span></div>
+                                <div>Customer Name: <span>@quickEntry.CustomerName</span></div>
+                                <div>Phone #: <span>@quickEntry.PhoneNumber</span></div>
+                            </div>
+                            <button class="btn btn-success mt-3" @onclick="ApplyQuickEntryToRow">Apply Parsed Data</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+
+@if (activeMenuColumnId != null && portalMenuPosition != null)
+{
+    var col = Columns.FirstOrDefault(c => c.Id == activeMenuColumnId);
+    if (col != null)
+    {
+        <div id="menu-@col.Id" class="column-menu"
+             style="position:fixed; left:@portalMenuPosition.LeftPx; top:@portalMenuPosition.TopPx; z-index:99999;">
+            <button class="dropdown-item" @onclick="() => StartRenameColumn(col.Id)">Rename</button>
+            <button class="dropdown-item text-danger" @onclick="() => DeleteColumn(col.Id)">Delete</button>
+        </div>
+    }
+}
+</div>
+<br />
+<br />
+@*COMPLETED ROWS TABLE*@
+<div class="salvage-board">
+    <div class="table-menu">
+        <h1>Completed</h1>
+    </div>
+    <!-- Wrap table in a scrollable container, this before was shrinking and getting to tight/bad UI-->
+    <div class="table-scroll-container">
+        @*ACTIVE ROW TABLE*@
+        <div class="table-container">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="row-menu-cell sticky-col first-col">
+                            <!--leaving blank for action column-->
+                            <p> </p>
+                        </th>
+                        @{
+                                int colIndexCompletedRows = 0;
+                            }
+                        @foreach (var col in Columns)
+                        {
+                            if (col.Label == "G#")
+                            {
+                                <th class="row-menu-cell sticky-col second-col">
+                                    <div class="d-flex justify-content-between align-items-center w-100">
+                                        <div>
+                                            
+                                            @col.Label
+                                            <span class="column-type-label">(@col.Type)
+                                            </span>
+                                        </div>
+                                        <!--Three-dot icon -->
+                                        <button class="menu-btn" @onclick="e => ShowColumnMenu(col.Id, e)" @ref="@columnMenuButtonRefs[col.Id]" @onclick:stopPropagation>
+                                            &#8942;
+                                        </button>
+                                    </div>
+                                </th>
+                            }
+                            else
+                            {
+                                <th class="position-relative">
+                                    <div class="d-flex justify-content-between align-items-center w-100">
+                                        <div>
+                                            @col.Label
+                                            <span class="column-type-label">(@col.Type)
+                                            </span>
+                                        </div>
+                                        <!--Three-dot icon -->
+                                        <button class="menu-btn" @onclick="e => ShowColumnMenu(col.Id, e)" @ref="@columnMenuButtonRefs[col.Id]" @onclick:stopPropagation>
+                                            &#8942;
+                                        </button>
+                                    </div>
+                                </th>
+                            }
+                            colIndexCompletedRows++; //adding to colIndex to keep track of columns and keep first col sticky
+                            <!-- Column menu -->
+                            @*
+                                @if (activeMenuColumnId == col.Id)
+                            {
+                                <dialog id="menu-@col.Id" class="column-menu">
+                                    <button class="dropdown-item" @onclick="() => StartRenameColumn(col.Id)">Rename</button>
+                                    <button class="dropdown-item text-danger" @onclick="() => DeleteColumn(col.Id)">Delete</button>
+                                </dialog>
+                            }
+                            *@
+                            
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in CompletedRows)
+                    {
+                        <tr class="data-row"
+                            @onmouseover="@(() => hoverRow = row.Id)"
+                            @onmouseout="@(() => hoverRow = null)">
+
+                            <!-- Three-dot menu cell -->
+                            <td class="row-menu-cell sticky-col first-col">
+                                <button class="menu-btn"
+                                        style="visibility:@((hoverRow == row.Id) ? "visible" : "hidden")"
+                                        @onclick="(e => ShowRowMenu(row.Id, e))" @onclick:stopPropagation>
+                                    &#8942;
+                                </button>
+                            </td>
+                            <!--Row Menu-->
+                                @if (activeRowMenuId == row.Id)
+                                {
+                                    @*row-menu-dropdown*@
+                                    <div id="row-menu-@row.Id" class="row-menu-dropdown">
+                                        <button class="dropdown-item" @onclick="() => OpenQuickEntryModal(row.Id)">Quick Entry</button> @*Quick entry => parser here*@
+                                        <button class="dropdown-item text-danger" @onclick="() => DeleteRow(row.Id)">Delete Row</button>
+                                    </div>
+                                }
+                            
+                            @{
+                                int rowIndex = 0;
+                            }
+                            @foreach (var col in Columns)
+                            {
+                                /*@onmouseover="() => {hoverRow = row.Id; currentHoverRow = row; currentUploadColumn = col;}" @onmouseout="() => hoverRow = null */
+                                /*@onmouseleave="() => hoverRow = null"  // remove from under onmousenter because it's breaking the file upload */
+                                @if (col.Label == "G#")
+                                {
+                                    <td class="file-cell sticky-col second-col">
+                                        <span class="input-tooltip-container">
+                                            @RenderCell(row, col)
+                                            @{
+                                                var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
+                                                var value = cell?.Value ?? "";
+                                            }
+                                            @if (!string.IsNullOrWhiteSpace(value) && value.Length > 15)
+                                            {
+                                                <span class="input-tooltip">
+                                                    <span>
+                                                        @value
+                                                    </span>
+                                                </span>
+                                            }
+                                        </span>
+                                    </td>
+                                }
+                                else if (col.Type == "FileUpload")
+                                {
+                                    <td class="file-cell">
+                                    <span class="file-cell-images">
+                                            @* show up to 3 thumbnails *@
+                                            @{
+                                            var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
+                                            var files = cell?.Files?.ToList() ?? new List<SalvageFile>();
+                                            }
+
+                                            @if (files.Count > 0)
+                                            {
+                                                var toShow = files.Count > 3 ? files.Take(3) : files;
+                                                foreach (var file in toShow)
+                                                {
+                                                    <span class="thumb-container" style="position:relative; display:inline-block;">
+                                                        <img src="@($"/salvage_uploads/{file.FileName}")"
+                                                                @onclick="() => OpenGallery(files, file.FileName)"
+                                                                class="tiny-thumb" />
+                                                    </span>
+                                                }
+                                                @*If more than3, show +N badge*@
+                                                if (files.Count > 3)
+                                                {
+                                                    <span class="more-badge" @onclick="() => OpenGallery(files, files.First().FileName)">
+                                                        +@(files.Count - 3)
+                                                    </span>
+                                                }
+                                            }
+                                            @* always show the upload Upload Button on hover *@
+
+                                            <label class="upload-btn" @onclick:stopPropagation>
+                                                +
+                                                <InputFile OnChange="async e => UploadMultipleFiles(e, row.Id, col.Id)" multiple style="display:none"
+                                                            @onclick:stopPropagation />
+                                            </label>
+                                    </span>
+                                </td>
+                                }
+                                else if (col.Type == "DocumentUpload")
+                                {
+                                    <td class="file-cell">
+                                        <span class="file-cell-images">
+                                            @{
+                                                var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
+                                                var files = cell?.Files?.ToList() ?? new List<SalvageFile>();
+                                            }
+                                            @foreach (var file in files)
+                                            {
+                                                // for view in browser
+                                                // var baseUrl = "https://towboat.vnassar.com";
+                                                // var baseUrl = "https://localhost:5010";
+                                                var baseUrl = "https://localhost:5010";
+                                                var fileUrl = $"{baseUrl}/salvage_uploads/{file.FileName}";
+                                                var officeViewerUrl = $"https://view.officeapps.live.com/op/view.aspx?src={Uri.EscapeDataString(fileUrl)}";
+
+                                                <span class="doc-link">
+                                                    @if (file.FileType == "application/pdf")
+                                                    {
+                                                        // direct browser link
+                                                        <a href="@($"/salvage_uploads/{file.FileName}")" target="_blank">
+                                                            <i class="fade fa-file-pdf-o" style="color:#d32f2f"></i>
+                                                            @file.OriginalName
+                                                        </a>
+                                                    }
+                                                    else if (file.FileType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+                                                    file.FileType == "application/msword" ||
+                                                    file.FileType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+                                                    file.FileType == "application/vnd.openxmlformats-officedocument.presentationml.presentation" ||
+                                                    file.FileType == "application/vnd.ms-excel")
+                                                    {
+                                                        // Word, Excel, PowerPoint: Office Online Viewer
+
+                                                        <a href="@officeViewerUrl" target="_blank" rel="noopener">
+                                                            <i class="fa fa-file-word-o" style="color:#1976d2"></i>
+                                                            @file.OriginalName
+                                                        </a>
+                                                    }
+                                                    else
+                                                    {
+                                                        // Other file types: direct link
+                                                        <a href="@($"/salvage_uploads/{file.FileName}")" target="_blank">
+                                                            <i class="fa fa-file-o"></i>
+                                                            @file.OriginalName
+                                                        </a>
+                                                    }
+                                                </span>
+
+                                            }
+                                            <label class="upload-btn" @onclick:stopPropagation>
+                                                +
+                                                <InputFile OnChange="e => UploadDocumentFiles(e, row.Id, col.Id)" multiple style="display:none" @onclick:stopPropagation />
+                                            </label>
+                                        </span>
+                                    </td>
+
+
+                                }
+                            else if (col.Type == "LongText")
+                            {
+                                var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id); //figure out where we are 
+                                var value = cell?.Value ?? ""; // once we know which cell we are, whats our value? if null make it empty
+
+                                <td class="file-cell">
+                                    <span class="input-tooltip-container">
+                                        <input class="form-control"
+                                            readonly
+                                            value="@value"
+                                            style="cursor:pointer"
+                                            @onclick="() => OpenLongTextModal(row, col)" />
+                                        @if (!string.IsNullOrWhiteSpace(value) && value.Length > 15)
+                                        {
+                                            <span class="input-tooltip">
+                                                <div class="tooltip-content">
+                                                    @value
+                                                </div>
+                                            </span>
+                                        }
+                                    </span>
+                                </td>
+                            }
+                            else
+                                {
+                                    <td class="file-cell">
+                                        <span class="input-tooltip-container">
+                                            @RenderCell(row, col)
+                                            @{
+                                                var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
+                                                var value = cell?.Value ?? "";
+                                            }
+                                            @if (!string.IsNullOrWhiteSpace(value) && value.Length > 15)
+                                            {
+                                                <span class="input-tooltip">
+                                                    <span>
+                                                        @value
+                                                    </span>
+                                                </span>
+                                            }
+                                        </span>
+                                    </td>
+                                }
+                                rowIndex++; // increment our index to keep track of rows and apply to our first row/column
+                                Console.WriteLine($"RowIndex = {rowIndex}");
+                            }
+
+                            
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+<!-- Modal UI -->
+@if (isAddColumnModalOpen)
+{
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal d-block" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Column</h5>
+                    <button type="button" class="btn-close" @onclick="CloseModal"></button>
+                </div>
+                <div class="modal-body">
+                    <label>Column Label</label>
+                    <input class="form-control" @bind="newColumnLabel" />
+
+                    <label class="mt-3">Column Type</label>
+                    <select class="form-select" @bind="newColumnType">
+                        <option value="Text">Text</option>
+                        <option value="LongText">Long Text</option>
+                        <option value="Status">Status</option>
+                        <option value="Dropdown">Dropdown</option>
+                        <option value="Date">Date</option>
+                        <option value="Number">Number</option>
+                        <option value="FileUpload">File Upload</option>
+                        <option value="DocumentUpload">Document Upload</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @onclick="CloseModal">Cancel</button>
+                    <button class="btn btn-primary" @onclick="AddColumn">Add Column</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (isRenaming)
+{
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal d-block" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Rename Column</h5>
+                </div>
+                <div class="modal-body">
+                    <input class="form-control" @bind="renameText" />
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @onclick="() => isRenaming = false">Cancel</button>
+                    <button class="btn btn-primary" @onclick="RenameColumn">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (isGalleryOpen)
+{
+    <div class="gallery-modal">
+        <div class="main-image">
+            <img src="@($"/salvage_uploads/{selectedImage}")" />
+        </div>
+        <div class="sidebar-thumbs">
+            @foreach (var img in currentGallery)
+            {
+                <div class="gallery-thumb-container">
+                <img src="@($"/salvage_uploads/{img.FileName}")"
+                class="thumb"
+                @onclick="() => selectedImage = img.FileName" />
+                <button class="delete-gallery-thumb"
+                        title="Delete"
+                        @onclick="async () => await DeleteFileAsync(img.Id)"
+                        @onclick:stopPropagation>
+                        ✕
+                    </button>
+                </div>
+            }
+        </div>
+        <button class="close-btn" @onclick="() => isGalleryOpen = false">×</button>
+    </div>
+}
+
+@if (isLongTextModalOpen)
+    {
+        
+            <div class="longtext-modal-backdrop"></div>
+            <div class="longtext-modal ">
+                <div class="longtext-modal-dialog">
+                    <div class="longtext-modal-content">
+                        <div class="longtext-modal-header">
+                            <h5 class="modal-title">Edit Text</h5>
+                            <button type="button" class="close-btn" @onclick="CloseLongTextModal">x</button>
+                        </div>
+                        <div class="longtext-modal-body">
+                            <textarea class="form-control"
+                                style="min-height:400px; width:100%;font-size:1.1rem"
+                                @bind="editingLongText">
+                            </textarea>
+                        </div>
+                        <div class="longtext-modal-footer">
+                            <button class="btn btn-secondary" @onclick="CloseLongTextModal">Cancel</button>
+                            <button class="btn btn-primary" @onclick="SaveLongTextModal">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    }
+
+@if (isQuickEntryModalOpen)
+    {
+        <div class="longtext-modal-backdrop"></div>
+        <div class="longtext-modal">
+            <div class="longtext-modal-dialog">
+                <div class="longtext-modal-content">
+                    <div class="longtext-modal-header">
+                        <h5 class="modal-title">Quick Entry</h5>
+                        <button type="button" class="close-btn" @onclick="CloseQuickEntryModal">x</button>
+                    </div>
+                    <div class="longtext-modal-body">
+                        <textarea class="form-control"
+                            style="min-height: 225px; width:100%;font-size:1.05rem"
+                            @bind="quickEntryInput">
+                        </textarea>
+                        <div class="mt-3">
+                            <button class="btn btn-secondary" @onclick="ParseQuickEntry">Parse</button>
                         </div>
                         @if (quickEntry != null)
                         {
@@ -624,7 +1062,7 @@
             if (_selectedYear != value)
             {
                 _selectedYear = value;
-                _ = LoadDashboardStats();
+                _ = LoadDashboardStatsAsync();
             }
         }
     }
@@ -637,7 +1075,7 @@
             if (_selectedMonth != value)
             {
                 _selectedMonth = value;
-                _ = LoadDashboardStats();
+                _ = LoadDashboardStatsAsync();
             }
         }
     }
@@ -658,7 +1096,7 @@
         AvailableYears = Enumerable.Range(minYear, maxYear - minYear + 1).ToList();
         selectedYear = maxYear;
         selectedMonth = null;
-        await LoadDashboardStats();
+        await LoadDashboardStatsAsync();
 
         //initialize dictionary for columns
         foreach (var col in Columns)
@@ -676,7 +1114,7 @@
         Rows = await TableService.GetRowsWithCellAsync();
     }
 
-    private async Task LoadDashboardStats()
+    private async Task LoadDashboardStatsAsync()
     {
         var rows = await TableService.GetRowsWithCellAsync();
 
@@ -704,7 +1142,7 @@
 
     private async Task OnFilterChanged(ChangeEventArgs e)
     {
-        await LoadDashboardStats();
+        await LoadDashboardStatsAsync();
     }
 
     //========Menu JS Interop ============
@@ -720,7 +1158,7 @@
             LeftPx = $"{rect.Left}px",
             TopPx = $"{rect.Bottom + 4}px"
         };
-        
+
         await JS.InvokeVoidAsync("registerClickOutside", dotNetHelper, $"menu-{colId}");
 
         // Register JS listener
@@ -909,7 +1347,7 @@
         isQuickEntryModalOpen = false; //close modal    
         quickEntryInput = ""; // clear this
         quickEntry = null; //clear this
-        
+
     }
 
     private void ParseQuickEntry()
@@ -988,7 +1426,7 @@
                 }
                 catch (Exception ex)
                 {
-
+                    Console.WriteLine($"Error  with quick entry data: {ex}");
                 }
                 //when done then...
                 await LoadBoardAsync();
@@ -1007,7 +1445,7 @@
         var value = cell?.Value ?? "";
 
         // starting the tooltip container here
-       // builder.OpenElement(0, "span");
+        // builder.OpenElement(0, "span");
         //builder.AddAttribute(1, "class", "input-tooltip-container");
 
         switch (col.Type)
@@ -1049,6 +1487,7 @@
                 {
                     await TableService.UpdateCellValueAsync(row.Id, col.Id, e.Value?.ToString() ?? "");
                     await LoadBoardAsync();
+                    await LoadDashboardStatsAsync();
                 }));
                 builder.CloseElement(); // close input
                 break;
@@ -1067,6 +1506,28 @@
                 break;
         }
     };
+
+
+    //======================Cell Filtering Active vs Completed==============
+    private List<SalvageRow> ActiveRows => Rows
+        .Where(r =>
+        {
+            var statusCol = Columns.FirstOrDefault(c => c.Label.Contains("Status", StringComparison.OrdinalIgnoreCase));
+            if (statusCol == null)
+                return false;
+            var statusCell = r.Cells.FirstOrDefault(cell => cell.ColumnId == statusCol.Id);
+            return statusCell != null && (statusCell.Value == "In Progress" || statusCell.Value == "Not Started");
+        }).ToList();
+
+        private List<SalvageRow> CompletedRows => Rows
+        .Where(r =>
+        {
+            var statusCol = Columns.FirstOrDefault(c => c.Label.Contains("Status", StringComparison.OrdinalIgnoreCase));
+            if (statusCol == null)
+                return false;
+            var statusCell = r.Cells.FirstOrDefault(cell => cell.ColumnId == statusCol.Id);
+            return statusCell != null && statusCell.Value == "Completed";
+        }).ToList();
 
     //======================File Upload=============
     private async Task UploadMultipleFiles(InputFileChangeEventArgs e, int rowId, int colId)

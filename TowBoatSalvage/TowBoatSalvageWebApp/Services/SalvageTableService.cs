@@ -92,7 +92,8 @@ namespace TowBoatSalvageWebApp.Services
                 {
                     Row = row,
                     ColumnId = col.Id,
-                    Value = string.Empty
+                   // Value = string.Empty
+                   Value = col.Type == "Status" ? "In Progress" : string.Empty
                 };
                 _db.Cells.Add(cell);
             }
