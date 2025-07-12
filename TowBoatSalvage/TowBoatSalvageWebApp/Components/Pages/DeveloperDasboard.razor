@@ -1,0 +1,102 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@using TowBoatSalvageWebApp.Data
+@inject ApplicationDbContext UserDb
+@page "/developer-dashboard"
+
+<PageTitle>Developer Dashboard</PageTitle>
+
+
+
+
+<h3>DeveloperDasboard</h3>
+<br />
+<br />
+<br />
+
+<h4>Registered Users</h4>
+@if (users == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>UserName</th>
+                <th>Email</th>
+                <th>ID</th>
+                <th>Roles(s)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                    <td>@user.Id</td>
+                    <td>
+                        @if (userRoles.ContainsKey(user.Id))
+                        {
+                            <span>@string.Join(", ", userRoles[user.Id])</span>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<br />
+
+<h4>Server Disk Space</h4>
+@if (totalGb > 0)
+{
+    <p><b>Total Space:</b> @totalGb GB</p>
+    <p><b>Free Space:</b> @freeGb GB</p>
+}
+else
+{
+    <p><em>Could not determine disk space.</em></p>
+}
+
+
+@code {
+    private List<ApplicationUser> users;
+    private Dictionary<string, List<string>> userRoles = new();
+
+    private double totalGb = 0;
+    private double freeGb = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // get all users
+        users = UserDb.Users.ToList();
+
+        // get roles for each user
+        foreach (var user in users)
+        {
+            var roles = await UserDb.UserRoles
+                .Where(ur => ur.UserId == user.Id)
+                .Join(UserDb.Roles, ur => ur.RoleId, r => r.Id, (ur, r) => r.Name)
+                .ToListAsync();
+
+            userRoles[user.Id] = roles;
+        }
+
+        // get disk info
+        var drive = System.IO.DriveInfo.GetDrives()
+            .FirstOrDefault(d => d.IsReady && (d.Name == "/" || d.Name == "C:\\")); 
+
+        if (drive != null)
+        {
+            totalGb = drive.TotalSize / 1_073_741_824.0;
+            freeGb = drive.AvailableFreeSpace / 1_073_741_824.0;
+        }
+    }
+}

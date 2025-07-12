@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\assets\" />
     <Folder Include="wwwroot\salvage_uploads\" />
   </ItemGroup>
 

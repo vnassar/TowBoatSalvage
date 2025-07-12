@@ -12,7 +12,8 @@
 
 <PageTitle>Log in</PageTitle>
 
-<h1>Log in</h1>
+@*
+    <h1>Log in</h1>
 <div class="row">
     <div class="col-lg-6">
         <section>
@@ -63,9 +64,53 @@
         </section>
     </div>
 </div>
+*@
+
+
+
+<div class="login-bg">
+    <div class="login-header">
+        <img src="assets/TowBoatLogo.png" alt="TowBoatUS" class="login-logo" />
+    </div>
+    <div class="login-card">
+        <h2 class="login-title">Login</h2>
+        <hr class="login-divider" />
+        <EditForm Model="Input" method="post" OnValidSubmit="LoginUser" FormName="Login">
+            <div class="input-group">
+                <span class="input-icon">
+                    <i class="fa fa-user"></i>
+                </span>
+                <InputText class="form-control" @bind-Value="Input.Email" placeholder="Username" />
+            </div>
+            <div class="input-group">
+                <span class="input-icon">
+                    <i class="fa fa-lock"></i>
+                </span>
+                <InputText class="form-control" @bind-Value="Input.Password" type="password" placeholder="Password" />
+            </div>
+            <div class="login-forgot">
+                <a href="Account/ForgotPassword">Forgot Password?</a>
+            </div>
+            <div class="login-forgot">
+                <a href="Account/Register">Register New User</a>
+            </div>
+            <button class="login-btn" type="submit">Login</button>
+            @if (!string.IsNullOrEmpty(errorMsg))
+            {
+                <div class="login-error">@errorMsg</div>
+            }
+        </EditForm>
+    </div>
+</div>
+
+
 
 @code {
     private string? errorMessage;
+
+    [SupplyParameterFromForm]
+    private LoginModel loginModel { get; set; } = new();
+    private string errorMsg;
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
@@ -124,5 +169,24 @@
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
+    }
+
+    private sealed class LoginModel
+    {
+        public string UserName { get; set; } = "";
+        public string Password { get; set; } = "";
+    }
+
+    private async Task HandleLogin()
+    {
+        var result = await SignInManager.PasswordSignInAsync(loginModel.UserName, loginModel.Password, false, false);
+        if (result.Succeeded)
+        {
+            NavigationManager.NavigateTo("/"); // redirect to salvage board page
+        }
+        else
+        {
+            errorMsg = "Invalid username or password.";
+        }
     }
 }

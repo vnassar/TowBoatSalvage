@@ -1,0 +1,84 @@
+﻿@page "/login-towboat"
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Identity
+@using TowBoatSalvageWebApp.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject NavigationManager Navigation
+
+<PageTitle>Login</PageTitle>
+
+<div class="login-bg">
+    <div class="login-header">
+        <img src="assets/TowBoatLogo.png" alt="TowBoatUS" class="login-logo" />
+    </div>
+    <div class="login-card">
+        <h2 class="login-title">Login</h2>
+        <hr class="login-divider" />
+        <EditForm Model="Input" method="post" OnValidSubmit="HandleLogin" FormName="Login">
+            <div class="input-group">
+                <span class="input-icon">
+                    <i class="fa fa-user"></i>
+                </span>
+                <InputText class="form-control" @bind-Value="loginModel.UserName" placeholder="Username" />
+            </div>
+            <div class="input-group">
+                <span class="input-icon">
+                    <i class="fa fa-lock"></i>
+                </span>
+                <InputText class="form-control" @bind-Value="loginModel.Password" type="password" placeholder="Password" />
+            </div>
+            <div class="login-forgot">
+                <a href="/Identity/Account/ForgotPassword">Forgot Password?</a>
+            </div>
+            <button class="login-btn" type="submit">Login</button>
+            @if (!string.IsNullOrEmpty(errorMsg))
+            {
+                <div class="login-error">@errorMsg</div>
+            }
+        </EditForm>
+    </div>
+</div>
+
+
+@code {
+    private LoginModel loginModel = new();
+    private string errorMsg;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromForm]
+    private LoginModel Input { get; set; } = new();
+
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (HttpMethods.IsGet(HttpContext.Request.Method))
+        {
+            // Clear the existing external cookie to ensure a clean login process
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+        }
+    }
+    
+
+    private sealed class LoginModel
+    {
+        public string UserName { get; set; }
+        public string Password { get; set; }
+    }
+
+    private async Task HandleLogin()
+    {
+        var result = await SignInManager.PasswordSignInAsync(loginModel.UserName, loginModel.Password, false, false);
+        if (result.Succeeded)
+        {
+            Navigation.NavigateTo("/"); // redirect to salvage board page
+        }
+        else
+        {
+            errorMsg = "Invalid username or password.";
+        }
+    }
+}
