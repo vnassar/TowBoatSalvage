@@ -6,7 +6,7 @@
             document.removeEventListener("mousedown", handler);
         }
     };
-    document.addEventListener("mousedown", handler);
+    document.addEventListener("mouseup", handler);
 };
 
 window.registerClickOutsideRow = function (dotNetHelper, elementId) {

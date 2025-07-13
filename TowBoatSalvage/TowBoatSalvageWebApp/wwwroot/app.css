@@ -139,6 +139,12 @@ h1:focus {
             vertical-align: middle;
         }
 
+        /* Row change color on hover*/
+         .data-row:hover td {
+             background-color: #e8e9f67c;
+             transition: background .25s;
+         }
+
     /* Column type label */
     .salvage-board .column-type-label {
         font-size: 11px;
@@ -153,7 +159,7 @@ h1:focus {
     }
 
         .salvage-board .data-row:hover {
-            background-color: #f9f9fb;
+            background-color: #f9f9fb
         }
 
     /* Menu buttons */
@@ -310,6 +316,9 @@ h1:focus {
         .salvage-board .upload-btn:hover {
             background-color: #dce0ea;
         }
+
+/* Row inside table darken on Hover*/
+
 
     /* Document links */
     .salvage-board .doc-link {
@@ -977,4 +986,15 @@ tbody, thead, tr {
     text-align: center;
     margin-top: 16px;
     font-size: 1.04em;
+}
+
+
+/* IMPROVEMENT TO DOCUMENT UPLOADS, NAMES WERE TOO LONG. SHORTENING THEM*/
+.doc-filename {
+    display: inline-block;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
 }

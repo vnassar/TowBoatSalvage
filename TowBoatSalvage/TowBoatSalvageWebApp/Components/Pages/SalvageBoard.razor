@@ -127,8 +127,7 @@
                                         <div>
                                             
                                             @col.Label
-                                            <span class="column-type-label">(@col.Type)
-                                            </span>
+                                            
                                         </div>
                                         <!--Three-dot icon -->
                                         <button class="menu-btn" @onclick="e => ShowColumnMenu(col.Id, e)" @ref="@columnMenuButtonRefs[col.Id]" @onclick:stopPropagation>
@@ -143,8 +142,6 @@
                                     <div class="d-flex justify-content-between align-items-center w-100">
                                         <div>
                                             @col.Label
-                                            <span class="column-type-label">(@col.Type)
-                                            </span>
                                         </div>
                                         <!--Three-dot icon -->
                                         <button class="menu-btn" @onclick="e => ShowColumnMenu(col.Id, e)" @ref="@columnMenuButtonRefs[col.Id]" @onclick:stopPropagation>
@@ -202,23 +199,24 @@
                                 /*@onmouseleave="() => hoverRow = null"  // remove from under onmousenter because it's breaking the file upload */
                                 @if (col.Label == "G#")
                                 {
-                                    <td class="file-cell sticky-col second-col">
-                                        <span class="input-tooltip-container">
-                                            @RenderCell(row, col)
-                                            @{
-                                                var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
-                                                var value = cell?.Value ?? "";
-                                            }
-                                            @if (!string.IsNullOrWhiteSpace(value) && value.Length > 15)
-                                            {
-                                                <span class="input-tooltip">
-                                                    <span>
-                                                        @value
+                                    
+                                        <td class="file-cell sticky-col second-col">
+                                            <span class="input-tooltip-container">
+                                                @RenderCell(row, col)
+                                                @{
+                                                    var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
+                                                    var value = cell?.Value ?? "";
+                                                }
+                                                @if (!string.IsNullOrWhiteSpace(value) && value.Length > 15)
+                                                {
+                                                    <span class="input-tooltip">
+                                                        <span>
+                                                            @value
+                                                        </span>
                                                     </span>
-                                                </span>
-                                            }
-                                        </span>
-                                    </td>
+                                                }
+                                            </span>
+                                        </td>
                                 }
                                 else if (col.Type == "FileUpload")
                                 {
@@ -282,7 +280,9 @@
                                                         // direct browser link
                                                         <a href="@($"/salvage_uploads/{file.FileName}")" target="_blank">
                                                             <i class="fade fa-file-pdf-o" style="color:#d32f2f"></i>
-                                                            @file.OriginalName
+                                                            <span class="doc-filename" title="@file.OriginalName">
+                                                                @file.OriginalName
+                                                            </span>
                                                         </a>
                                                     }
                                                     else if (file.FileType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
@@ -295,7 +295,9 @@
 
                                                         <a href="@officeViewerUrl" target="_blank" rel="noopener">
                                                             <i class="fa fa-file-word-o" style="color:#1976d2"></i>
-                                                            @file.OriginalName
+                                                            <span class="doc-filename" title="@file.OriginalName">
+                                                                @file.OriginalName
+                                                            </span>
                                                         </a>
                                                     }
                                                     else
@@ -303,7 +305,9 @@
                                                         // Other file types: direct link
                                                         <a href="@($"/salvage_uploads/{file.FileName}")" target="_blank">
                                                             <i class="fa fa-file-o"></i>
-                                                            @file.OriginalName
+                                                            <span class="doc-filename" title="@file.OriginalName">
+                                                                @file.OriginalName
+                                                            </span>
                                                         </a>
                                                     }
                                                 </span>
@@ -362,7 +366,6 @@
                                     </td>
                                 }
                                 rowIndex++; // increment our index to keep track of rows and apply to our first row/column
-                                Console.WriteLine($"RowIndex = {rowIndex}");
                             }
 
                             
@@ -374,7 +377,7 @@
     </div>
 
 <!-- Add Row Button -->
-<button class="btn btn-secondary" @onclick="AddRow" disabled="@(!Columns.Any())">+ Add Row</button>
+<button class="btn btn-secondary" @onclick="AddRow" disabled="@(!Columns.Any())">+ Add New Dispatch</button>
 
 <!-- Modal UI -->
 @if (isAddColumnModalOpen)
@@ -548,7 +551,7 @@
     </div>
     <!-- Wrap table in a scrollable container, this before was shrinking and getting to tight/bad UI-->
     <div class="table-scroll-container">
-        @*ACTIVE ROW TABLE*@
+        @*COMPLETED ROW TABLE*@
         <div class="table-container">
             <table class="table table-bordered">
                 <thead>
@@ -573,9 +576,12 @@
                                             </span>
                                         </div>
                                         <!--Three-dot icon -->
-                                        <button class="menu-btn" @onclick="e => ShowColumnMenu(col.Id, e)" @ref="@columnMenuButtonRefs[col.Id]" @onclick:stopPropagation>
+                                        @*
+                                            removing bc when you click on this button within the ACTIVE row, it shows up down here... wtf!!!!
+                                            <button class="menu-btn" @onclick="e => ShowColumnMenu(col.Id, e)" @ref="@columnMenuButtonRefs[col.Id]" @onclick:stopPropagation>
                                             &#8942;
                                         </button>
+                                        *@
                                     </div>
                                 </th>
                             }
@@ -589,9 +595,12 @@
                                             </span>
                                         </div>
                                         <!--Three-dot icon -->
-                                        <button class="menu-btn" @onclick="e => ShowColumnMenu(col.Id, e)" @ref="@columnMenuButtonRefs[col.Id]" @onclick:stopPropagation>
+                                        @*
+                                            removing bc when you click on this button within the ACTIVE row, it shows up down here... wtf!!!!
+                                            <button class="menu-btn" @onclick="e => ShowColumnMenu(col.Id, e)" @ref="@columnMenuButtonRefs[col.Id]" @onclick:stopPropagation>
                                             &#8942;
                                         </button>
+                                        *@
                                     </div>
                                 </th>
                             }
@@ -804,7 +813,6 @@
                                     </td>
                                 }
                                 rowIndex++; // increment our index to keep track of rows and apply to our first row/column
-                                Console.WriteLine($"RowIndex = {rowIndex}");
                             }
 
                             
@@ -853,23 +861,26 @@
 
 @if (isRenaming)
 {
-    <div class="modal-backdrop fade show"></div>
-    <div class="modal d-block" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Rename Column</h5>
-                </div>
-                <div class="modal-body">
-                    <input class="form-control" @bind="renameText" />
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" @onclick="() => isRenaming = false">Cancel</button>
-                    <button class="btn btn-primary" @onclick="RenameColumn">Save</button>
+    <div class="isRenaming">
+        <div class="modal-backdrop fade show"></div>
+        <div class="modal d-block" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Rename Column</h5>
+                    </div>
+                    <div class="modal-body">
+                        <input class="form-control" @bind="renameText" />
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" @onclick="() => isRenaming = false">Cancel</button>
+                        <button class="btn btn-primary" @onclick="RenameColumn">Save</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 }
 
 @if (isGalleryOpen)
@@ -1150,6 +1161,9 @@
     {
         activeMenuColumnId = colId;
 
+        //Debuging
+        //Console.WriteLine($"ColumnId for trying to rename is: {colId} ");
+
         // using js to get screen position of the menu button
         var elemRef = GetColumnMenuButtonRef(colId);
         var rect = await JS.InvokeAsync<DomRect>("getBoundingClientRect", elemRef);
@@ -1235,6 +1249,7 @@
         await TableService.DeleteRowAsync(rowId);
         activeRowMenuId = null;
         await LoadBoardAsync(); //needed because it renders again the database, StateHasChanged does not properly update it 
+        await LoadDashboardStatsAsync(); //update total dispatches
 
     }
 
@@ -1242,13 +1257,14 @@
 
     private void StartRenameColumn(int columnId)
     {
+        Console.WriteLine($"Renaming column id of {columnId}");
         var col = Columns.FirstOrDefault(c => c.Id == columnId);
         if (col != null)
         {
             renameText = col.Label;
             isRenaming = true;
-            activeMenuColumnId = null;
             editingColumndId = columnId;
+            activeMenuColumnId = null;
         }
     }
 
