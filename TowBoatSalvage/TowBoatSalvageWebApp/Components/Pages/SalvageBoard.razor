@@ -230,7 +230,7 @@
 
                                             @if (files.Count > 0)
                                             {
-                                                var toShow = files.Count > 3 ? files.Take(3) : files;
+                                                var toShow = files.Count > 4 ? files.Take(4) : files;
                                                 foreach (var file in toShow)
                                                 {
                                                     <span class="thumb-container" style="position:relative; display:inline-block;">
@@ -240,10 +240,10 @@
                                                     </span>
                                                 }
                                                 @*If more than3, show +N badge*@
-                                                if (files.Count > 3)
+                                                if (files.Count > 4)
                                                 {
                                                     <span class="more-badge" @onclick="() => OpenGallery(files, files.First().FileName)">
-                                                        +@(files.Count - 3)
+                                                        +@(files.Count - 4)
                                                     </span>
                                                 }
                                             }
@@ -260,12 +260,15 @@
                                 else if (col.Type == "DocumentUpload")
                                 {
                                     <td class="file-cell">
-                                        <span class="file-cell-images">
+                                        <div class="doc-cell-list">
                                             @{
                                                 var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
                                                 var files = cell?.Files?.ToList() ?? new List<SalvageFile>();
+
+                                                var docsToShow = files.Take(2).ToList();
+                                                var docOverflow = files.Count - docsToShow.Count;
                                             }
-                                            @foreach (var file in files)
+                                            @foreach (var file in docsToShow) //switing from file in files to file in docsToShow to get position 0 and 1
                                             {
                                                 // for view in browser
                                                 // var baseUrl = "https://towboat.vnassar.com";
@@ -313,11 +316,15 @@
                                                 </span>
 
                                             }
+                                            @if (docOverflow > 0)
+                                            {
+                                                <span class="more-docs-badge" @onclick="() => OpenDocGallery(files)">+@docOverflow more</span>
+                                            }
                                             <label class="upload-btn" @onclick:stopPropagation>
                                                 +
                                                 <InputFile OnChange="e => UploadDocumentFiles(e, row.Id, col.Id)" multiple style="display:none" @onclick:stopPropagation />
                                             </label>
-                                        </span>
+                                        </div>
                                     </td>
 
 
@@ -541,6 +548,72 @@
         </div>
     }
 }
+
+@if (isDocGalleryOpen)
+{
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal d-block" tabindex="-1" style="z-index: 1200;">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Documents</h5>
+                    <button type="button" class="btn-close" @onclick="CloseDocGallery"></button>
+                </div>
+                <div class="modal-body">
+                    @if (docGalleryFiles.Count == 0)
+                    {
+                        <p>No documents.</p>
+                    }
+                    else
+                    {
+                        <ul style="list-style-type:none; padding:0;">
+                            @foreach (var file in docGalleryFiles)
+                            {
+                                var baseUrl = "https://localhost:5010";
+                                var fileUrl = $"{baseUrl}/salvage_uploads/{file.FileName}";
+                                var officeViewerUrl = $"https://view.officeapps.live.com/op/view.aspx?src={Uri.EscapeDataString(fileUrl)}";
+
+                                <li style="margin-bottom:12px;">
+                                    @if (file.FileType == "application/pdf")
+                                    {
+                                        <a href="@($"/salvage_uploads/{file.FileName}")" target="_blank">
+                                            <i class="fade fa-file-pdf-o" style="color:#d32f2f"></i>
+                                            @file.OriginalName
+                                        </a>
+                                    }
+                                    else if (file.FileType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+                                             file.FileType == "application/msword" ||
+                                             file.FileType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+                                             file.FileType == "application/vnd.openxmlformats-officedocument.presentationml.presentation" ||
+                                             file.FileType == "application/vnd.ms-excel")
+                                    {
+                                        <a href="@officeViewerUrl" target="_blank" rel="noopener">
+                                            <i class="fa fa-file-word-o" style="color:#1976d2"></i>
+                                            @file.OriginalName
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@($"/salvage_uploads/{file.FileName}")" target="_blank">
+                                            <i class="fa fa-file-o"></i>
+                                            <span class="doc-filename" title="@file.OriginalName">
+                                                @file.OriginalName
+                                            </span>
+                                        </a>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @onclick="CloseDocGallery">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 </div>
 <br />
 <br />
@@ -1035,6 +1108,23 @@
     private int? activeMenuColumnId = null;
     private PortalMenuPosition? portalMenuPosition = null;
     private DotNetObjectReference<SalvageBoard>? _menuRef;
+
+    /*document galler*/
+    private bool isDocGalleryOpen = false;
+    private List<SalvageFile> docGalleryFiles = new();
+    private string docGalleryTitle = "";
+
+    private void OpenDocGallery(List<SalvageFile> files)
+    {
+        docGalleryFiles = files;
+        isDocGalleryOpen = true;
+    }
+
+    private void CloseDocGallery()
+    {
+        isDocGalleryOpen = false;
+        docGalleryFiles = new();
+    }
 
     public class PortalMenuPosition
     {

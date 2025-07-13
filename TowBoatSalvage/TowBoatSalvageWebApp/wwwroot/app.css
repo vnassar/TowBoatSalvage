@@ -998,3 +998,30 @@ tbody, thead, tr {
     white-space: nowrap;
     vertical-align: bottom;
 }
+
+
+
+.more-docs-badge {
+    display: inline-flex;
+    align-items: center;
+    background: #ebedf5;
+    color: #1b6ec2;
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-size: 0.97em;
+    cursor: pointer;
+    font-weight: 500;
+    border: 1px solid #dde3ee;
+    margin-right: 30px;
+    /*margin-left: 4px; */
+}
+
+.modal-backdrop.fade.show {
+    position: fixed;
+    z-index: 1100;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+}
