@@ -1025,3 +1025,100 @@ tbody, thead, tr {
     height: 100vh;
     background: rgba(0,0,0,0.5);
 }
+
+/*NAV BAR */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    background-color: white;
+    color: #000;
+    border-bottom: 1px solid #e0e0e0;
+    height: 60px
+}
+
+.logo {
+    color: #000;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.hamburger-icon {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    outline: none;
+    padding: 10px;
+    transition: transform 0.3s ease;
+}
+
+    .hamburger-icon span {
+        width: 30px;
+        height: 3px;
+        background-color: #000000;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+
+    /* animation for open state*/
+    .hamburger-icon.open span:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+    .hamburger-icon.open span:nth-child(2) {
+        opacity: 0;
+    }
+    .hamburger-icon.open span:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
+    .menu-links {
+        display: none;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        background-color: white;
+        position: absolute;
+        top: 100px;
+        left: 0;
+        right: 0;
+        padding: 20px;
+    }
+
+    .menu-links li a {
+        color: #000;
+        text-decoration: none;
+        font-size: 1.2rem;
+        transition: color 0.2s ease;
+    }
+
+        .menu-links li a:hover {
+            color: rgb(85, 85, 85);
+        }
+
+    .menu-links.open {
+        display: flex;
+    }
+/* responsive style */
+@media (min-width: 768px) {
+    .hamburger-icon {
+        display: none;
+    }
+    .menu-links {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+        position: static;
+        padding: 0;
+    }
+
+    .menu-links li a {
+        font-size: 1rem;
+    }
+}

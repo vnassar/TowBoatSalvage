@@ -56,6 +56,24 @@
 </script>
 
 <PageTitle>Dashboard</PageTitle>
+@*NAVBAR*@
+<div class="navbar">
+    <div class="logo">Victor Nassar</div>
+    <!-- Modern Hamburger Icon -->
+    <button class="hamburger-icon @iconClass" @onclick="ToggleMenu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <!-- Mobile Menu Links -->
+    <ul class="menu-links @menuClass">
+        <li><a href="#about" @onclick="CloseMenu">About</a></li>
+        <li><a href="#experience" @onclick="CloseMenu">Experience</a></li>
+        <li><a href="#projects" @onclick="CloseMenu">Projects</a></li>
+        <li><a href="#contact" @onclick="CloseMenu">Contact</a></li>
+    </ul>
+</div>
 
 @*Dashboard****************@
 <div class="dashboard-section">
@@ -169,6 +187,7 @@
                     @foreach (var row in ActiveRows)
                     {
                         <tr class="data-row"
+                            @key="row.Id"
                             @onmouseover="@(() => hoverRow = row.Id)"
                             @onmouseout="@(() => hoverRow = null)">
 
@@ -696,6 +715,7 @@
                     @foreach (var row in CompletedRows)
                     {
                         <tr class="data-row"
+                            @key="row.Id"
                             @onmouseover="@(() => hoverRow = row.Id)"
                             @onmouseout="@(() => hoverRow = null)">
 
@@ -785,13 +805,16 @@
                                 }
                                 else if (col.Type == "DocumentUpload")
                                 {
-                                    <td class="file-cell">
-                                        <span class="file-cell-images">
+                                   <td class="file-cell">
+                                        <div class="doc-cell-list">
                                             @{
                                                 var cell = row.Cells.FirstOrDefault(c => c.ColumnId == col.Id);
                                                 var files = cell?.Files?.ToList() ?? new List<SalvageFile>();
+
+                                                var docsToShow = files.Take(2).ToList();
+                                                var docOverflow = files.Count - docsToShow.Count;
                                             }
-                                            @foreach (var file in files)
+                                            @foreach (var file in docsToShow) //switing from file in files to file in docsToShow to get position 0 and 1
                                             {
                                                 // for view in browser
                                                 // var baseUrl = "https://towboat.vnassar.com";
@@ -806,7 +829,9 @@
                                                         // direct browser link
                                                         <a href="@($"/salvage_uploads/{file.FileName}")" target="_blank">
                                                             <i class="fade fa-file-pdf-o" style="color:#d32f2f"></i>
-                                                            @file.OriginalName
+                                                            <span class="doc-filename" title="@file.OriginalName">
+                                                                @file.OriginalName
+                                                            </span>
                                                         </a>
                                                     }
                                                     else if (file.FileType == "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
@@ -819,7 +844,9 @@
 
                                                         <a href="@officeViewerUrl" target="_blank" rel="noopener">
                                                             <i class="fa fa-file-word-o" style="color:#1976d2"></i>
-                                                            @file.OriginalName
+                                                            <span class="doc-filename" title="@file.OriginalName">
+                                                                @file.OriginalName
+                                                            </span>
                                                         </a>
                                                     }
                                                     else
@@ -827,17 +854,23 @@
                                                         // Other file types: direct link
                                                         <a href="@($"/salvage_uploads/{file.FileName}")" target="_blank">
                                                             <i class="fa fa-file-o"></i>
-                                                            @file.OriginalName
+                                                            <span class="doc-filename" title="@file.OriginalName">
+                                                                @file.OriginalName
+                                                            </span>
                                                         </a>
                                                     }
                                                 </span>
 
                                             }
+                                            @if (docOverflow > 0)
+                                            {
+                                                <span class="more-docs-badge" @onclick="() => OpenDocGallery(files)">+@docOverflow more</span>
+                                            }
                                             <label class="upload-btn" @onclick:stopPropagation>
                                                 +
                                                 <InputFile OnChange="e => UploadDocumentFiles(e, row.Id, col.Id)" multiple style="display:none" @onclick:stopPropagation />
                                             </label>
-                                        </span>
+                                        </div>
                                     </td>
 
 
@@ -1113,6 +1146,23 @@
     private bool isDocGalleryOpen = false;
     private List<SalvageFile> docGalleryFiles = new();
     private string docGalleryTitle = "";
+
+    /*Hamburger Menu*/
+    private string menuClass = "";
+    private string iconClass = "";
+
+    private void ToggleMenu()
+    {
+        menuClass = menuClass == "open" ? "" : "open";
+        iconClass = iconClass == "open" ? "" : "open";
+    }
+
+    private void CloseMenu()
+    {
+        menuClass = "";
+        iconClass = "";
+    }
+
 
     private void OpenDocGallery(List<SalvageFile> files)
     {
@@ -1564,6 +1614,7 @@
                 {
                     await TableService.UpdateCellValueAsync(row.Id, col.Id, e.Value?.ToString() ?? "");
                     await LoadBoardAsync();
+                    
                 }));
                 builder.OpenElement(4, "option"); builder.AddContent(5, "Not Started"); builder.CloseElement();
                 builder.OpenElement(6, "option"); builder.AddContent(7, "In Progress"); builder.CloseElement();
