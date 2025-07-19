@@ -1,4 +1,4 @@
-﻿@page "/salvage-board"
+﻿@page "/dashboard"
 @using TowBoatSalvageWebApp.Data
 @using TowBoatSalvageWebApp.Models
 @using TowBoatSalvageWebApp.Services
@@ -58,7 +58,9 @@
 <PageTitle>Dashboard</PageTitle>
 @*NAVBAR*@
 <div class="navbar">
-    <div class="logo">Victor Nassar</div>
+    <div class="logo">
+        <img src="assets/TowBoatLogo.png" alt="TowBoatUS Logo" class="login-logo"/>
+    </div>
     <!-- Modern Hamburger Icon -->
     <button class="hamburger-icon @iconClass" @onclick="ToggleMenu">
         <span></span>
@@ -68,10 +70,10 @@
 
     <!-- Mobile Menu Links -->
     <ul class="menu-links @menuClass">
-        <li><a href="#about" @onclick="CloseMenu">About</a></li>
-        <li><a href="#experience" @onclick="CloseMenu">Experience</a></li>
-        <li><a href="#projects" @onclick="CloseMenu">Projects</a></li>
-        <li><a href="#contact" @onclick="CloseMenu">Contact</a></li>
+        <li><a href="#" @onclick="CloseMenu">Server Stats</a></li>
+        <li><a href="#" @onclick="CloseMenu">Fuel List</a></li>
+        <li><a href="#" @onclick="CloseMenu">Dashboard</a></li>
+        <li><a href="#" @onclick="CloseMenu">Captain Payment Portal</a></li>
     </ul>
 </div>
 
@@ -290,9 +292,9 @@
                                             @foreach (var file in docsToShow) //switing from file in files to file in docsToShow to get position 0 and 1
                                             {
                                                 // for view in browser
-                                                // var baseUrl = "https://towboat.vnassar.com";
+                                                // var baseUrl = "https://towboatustb.com";
                                                 // var baseUrl = "https://localhost:5010";
-                                                var baseUrl = "https://localhost:5010";
+                                                var baseUrl = "https://towboatustb.com";
                                                 var fileUrl = $"{baseUrl}/salvage_uploads/{file.FileName}";
                                                 var officeViewerUrl = $"https://view.officeapps.live.com/op/view.aspx?src={Uri.EscapeDataString(fileUrl)}";
 
@@ -819,7 +821,7 @@
                                                 // for view in browser
                                                 // var baseUrl = "https://towboat.vnassar.com";
                                                 // var baseUrl = "https://localhost:5010";
-                                                var baseUrl = "https://localhost:5010";
+                                                var baseUrl = "https://towboatustb.com";
                                                 var fileUrl = $"{baseUrl}/salvage_uploads/{file.FileName}";
                                                 var officeViewerUrl = $"https://view.officeapps.live.com/op/view.aspx?src={Uri.EscapeDataString(fileUrl)}";
 

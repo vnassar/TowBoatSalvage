@@ -1,7 +1,48 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Coming soon</PageTitle>
+@*NAVBAR*@
+<div class="navbar">
+    <div class="logo">
+        <img src="assets/TowBoatLogo.png" alt="TowBoatUS Logo" class="login-logo" />
+    </div>
+    <!-- Modern Hamburger Icon -->
+    <button class="hamburger-icon @iconClass" @onclick="ToggleMenu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
 
-<h1>Hello, world!</h1>
+    <!-- Mobile Menu Links -->
+    <ul class="menu-links @menuClass">
+        <li><a href="#" @onclick="CloseMenu">Server Stats</a></li>
+        <li><a href="#" @onclick="CloseMenu">Fuel List</a></li>
+        <li><a href="#" @onclick="CloseMenu">Dashboard</a></li>
+        <li><a href="#" @onclick="CloseMenu">Captain Payment Portal</a></li>
+    </ul>
+</div>
 
-Welcome to your new app.
+<h1>Home page not implemented yet...</h1>
+
+<br />
+<br />
+
+<a href="/dashboard">Main Dashboard Click Here</a>
+
+@code {
+    /*Hamburger Menu*/
+    private string menuClass = "";
+    private string iconClass = "";
+
+    private void ToggleMenu()
+    {
+        menuClass = menuClass == "open" ? "" : "open";
+        iconClass = iconClass == "open" ? "" : "open";
+    }
+
+    private void CloseMenu()
+    {
+        menuClass = "";
+        iconClass = "";
+    }
+}

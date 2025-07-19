@@ -180,8 +180,6 @@ C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalv
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Release\net9.0\scopedcss\Components\Layout\NavMenu.razor.rz.scp.css
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Release\net9.0\scopedcss\bundle\TowBoatSalvageWebApp.styles.css
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Release\net9.0\scopedcss\projectbundle\TowBoatSalvageWebApp.bundle.scp.css
-C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Release\net9.0\compressed\inx8qzgsre-52ocraf7sc.gz
-C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Release\net9.0\compressed\zp6gbi7m47-qc52f8j629.gz
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Release\net9.0\compressed\myv7dohera-bqjiyaj88i.gz
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Release\net9.0\compressed\n3kaads3hv-c2jlpeoesf.gz
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Release\net9.0\compressed\qy3bmbiy9u-erw9l3u2r3.gz
@@ -239,3 +237,6 @@ C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalv
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Release\net9.0\TowBoatSalvageWebApp.pdb
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Release\net9.0\TowBoatSalvageWebApp.genruntimeconfig.cache
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Release\net9.0\ref\TowBoatSalvageWebApp.dll
+C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Release\net9.0\compressed\zp6gbi7m47-yh85s3786b.gz
+C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Release\net9.0\compressed\quo2apktw6-8mb014295a.gz
+C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Release\net9.0\compressed\inx8qzgsre-4zanev286i.gz

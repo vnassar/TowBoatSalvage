@@ -485,4 +485,4 @@ C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalv
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\ref\TowBoatSalvageWebApp.dll
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\compressed\zp6gbi7m47-yh85s3786b.gz
-C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\compressed\inx8qzgsre-82uts3st12.gz
+C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\obj\Debug\net9.0\compressed\inx8qzgsre-4zanev286i.gz

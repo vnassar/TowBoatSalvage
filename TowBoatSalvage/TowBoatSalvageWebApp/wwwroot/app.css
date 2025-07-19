@@ -727,7 +727,7 @@ tbody, thead, tr {
 .table-scroll-container {
     width: 100%;
     overflow-x: auto;
-    max-width: 1100px; /* max widgth otherwise the table is super wide*/
+    max-width: 1400px; /* max widgth otherwise the table is super wide*/
 }
 
 .sticky-col {
@@ -1120,5 +1120,158 @@ tbody, thead, tr {
 
     .menu-links li a {
         font-size: 1rem;
+    }
+}
+
+
+/*FOR MOBILE USE***************/
+@media (max-width: 900px) {
+    .dashboard-section,
+    .salvage-board {
+        padding: 8px !important;
+        margin-bottom: 18px !important;
+        max-width: 100vw !important;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .dashboard-filters {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .dashboard-stats {
+        flex-direction: column;
+        gap: 18px;
+        width: 100%;
+    }
+
+    .dashboard-card {
+        width: 100% !important;
+        min-width: 0;
+        padding: 18px 10px;
+        align-items: flex-start;
+        font-size: 1.05em;
+    }
+
+    .table-scroll-container, .table-container {
+        max-width: 100vw !important;
+        padding: 0;
+        box-shadow: none;
+    }
+
+    .salvage-board .table {
+        min-width: 600px !important; /* allow horizontal scroll on mobile */
+        font-size: 0.97em;
+    }
+
+        /* Tighter padding for mobile */
+        .salvage-board .table th, .salvage-board .table td {
+            padding: 7px 6px !important;
+            min-width: 100px !important;
+            font-size: 0.98em !important;
+            max-width: 180px !important;
+        }
+
+            .salvage-board .table th.row-menu-cell,
+            .salvage-board .table td.row-menu-cell {
+                min-width: 32px !important;
+                max-width: 32px !important;
+                padding: 4px !important;
+            }
+
+    /* Stack modal dialogs for mobile */
+    .modal-dialog,
+    .longtext-modal-dialog {
+        max-width: 98vw !important;
+        min-width: 0 !important;
+        width: 98vw !important;
+    }
+
+    .modal-content,
+    .longtext-modal-content {
+        padding: 0 !important;
+        border-radius: 12px !important;
+        min-height: 120px !important;
+    }
+
+    .longtext-modal-header,
+    .longtext-modal-footer {
+        padding: 10px 12px !important;
+        font-size: 1em !important;
+    }
+
+    .longtext-modal-body {
+        padding: 12px 8px 10px 8px !important;
+        font-size: 0.98em !important;
+    }
+
+    /* File/Doc names, make ellipsis stricter */
+    .doc-filename {
+        max-width: 65px !important;
+        font-size: 0.96em;
+    }
+
+    /* Gallery Modal tweaks */
+    .gallery-modal {
+        flex-direction: column;
+        padding: 8px !important;
+    }
+
+    .main-image img {
+        max-width: 97vw !important;
+        max-height: 38vh !important;
+    }
+
+    .sidebar-thumbs {
+        width: 98vw !important;
+        padding: 8px !important;
+        margin: 8px 0 0 0 !important;
+        flex-direction: row !important;
+        overflow-x: auto !important;
+        gap: 8px;
+        background: none !important;
+    }
+
+    .thumb {
+        height: 72px !important;
+        min-width: 70px !important;
+    }
+
+    /* Hamburger/menu always visible at top */
+    .navbar {
+        padding: 2px 6px !important;
+        min-height: 44px;
+    }
+
+    .login-logo {
+        height: 32px !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .salvage-board .table th, .salvage-board .table td {
+        min-width: 80px !important;
+        max-width: 100px !important;
+        font-size: 0.91em !important;
+        padding: 4px 3px !important;
+    }
+
+    .dashboard-title {
+        font-size: 1.13rem !important;
+    }
+
+    .dashboard-card-value {
+        font-size: 1.38rem !important;
+    }
+
+    .login-card {
+        padding: 16px 4px 16px 4px !important;
+        font-size: 0.98em !important;
+        min-width: 0 !important;
     }
 }

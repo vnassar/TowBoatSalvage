@@ -3,7 +3,7 @@
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\vnass\Desktop\Projects\GitHub\TowBoatSalvage\TowBoatSalvage\TowBoatSalvageWebApp\bin\Release\net9.0\publish\</_PublishTargetUrl>
-    <History>True|2025-06-27T21:15:38.4904703Z||;True|2025-06-26T20:23:20.8301881-04:00||;True|2025-06-26T20:06:53.0910088-04:00||;</History>
+    <History>True|2025-07-18T00:55:08.4035109Z||;True|2025-07-17T20:19:23.1036374-04:00||;False|2025-07-17T20:17:59.1555006-04:00||;True|2025-06-27T17:15:38.4904703-04:00||;True|2025-06-26T20:23:20.8301881-04:00||;True|2025-06-26T20:06:53.0910088-04:00||;</History>
     <LastFailureDetails />
   </PropertyGroup>
 </Project>
